@@ -334,7 +334,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/19/Android 开发实用小技巧/" itemprop="url">Android 应用中实现 Cocos2dx 游戏的返回键监听</a></h1>
+                <a class="post-title-link" href="/2017/09/19/Android 开发实用小技巧/" itemprop="url">Android 开发实用小技巧</a></h1>
         
 
         <div class="post-meta">
@@ -398,7 +398,7 @@
 
           
           
-             <span id="/2017/09/19/Android 开发实用小技巧/" class="leancloud_visitors" data-flag-title="Android 应用中实现 Cocos2dx 游戏的返回键监听">
+             <span id="/2017/09/19/Android 开发实用小技巧/" class="leancloud_visitors" data-flag-title="Android 开发实用小技巧">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -427,67 +427,16 @@
 
       
         
-          
-            <h3 id="文本与布局"><a href="#文本与布局" class="headerlink" title="文本与布局"></a>文本与布局</h3><ol>
+          <h3 id="文本与布局"><a href="#文本与布局" class="headerlink" title="文本与布局"></a>文本与布局</h3><ol>
 <li><p>字符串资源里的变量替换<br>当程序中使用字符串如第 345 页，我们不可能使用两个字符串资源如</p>
  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;string name="di"&gt;第&lt;/string&gt; </div><div class="line">&lt;string name="page"&gt;页&lt;/string&gt;</div></pre></td></tr></table></figure>
-<p>在 android 中有一个东西是 XLIFF，全称是 XML 本地化数据交换格式，英文是 XML Loca lization Interchange File Format。<br>用法很简单，如下所示</p>
- <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;string name="page"&gt;第%1$s页&lt;/string&gt;</div><div class="line">程序中只要给变量赋值就好了，如下：</div><div class="line">String page = getString(R.string.page,"345");</div></pre></td></tr></table></figure>
-<p>要是有多个变量，如第 345 页 24 行 ? 这也好办，如下:</p>
- <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;string name="page"&gt;第%1$s页%2$s行&lt;/string&gt;</div><div class="line">String page = getString(R.string.page,"345","24");</div></pre></td></tr></table></figure>
-</li>
-<li><p>TextView 设置多种字体大小</p>
-<p><img src="https://github.com/xxtlant/BlogPicture/blob/master/android%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/TextViewSpan.png?raw=true" alt="TextView字体"></p>
-<p>像这样的两种字体，要如何处理呢</p>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">    String text = <span class="string">"Android实战技巧之文本与布局"</span>;</div><div class="line">    <span class="keyword">int</span> start = text.indexOf(<span class="string">'之'</span>);</div><div class="line">    <span class="keyword">int</span> end = text.length();</div><div class="line">    Spannable textSpan =  <span class="keyword">new</span> SpannableString(text);</div><div class="line">    textSpan.setSpan(<span class="keyword">new</span> AbsoluteSizeSpan(<span class="number">20</span>), <span class="number">0</span>, start,</div><div class="line">                    Spannable.SPAN_INCLUSIVE_INCLUSIVE);</div><div class="line">    textSpan.setSpan(<span class="keyword">new</span> AbsoluteSizeSpan(<span class="number">12</span>), start,</div><div class="line">                    end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);</div><div class="line">    ``` </div><div class="line">    这个 textSpan 就是你想要的。</div><div class="line">    </div><div class="line"><span class="number">3</span>. TextView 的超链接</div><div class="line">  这个很简单，在 xml 中属性 `autoLink=“all”`。</div><div class="line">  程序中 `TextView.setAutoLink(Linkify.ALL)`;</div><div class="line">  说一下 `autoLink` 中的参数：</div><div class="line"></div><div class="line">    ```java</div><div class="line">    Linkify.EMAIL_ADDRESS -- 仅识别出 TextView 中的 Email 在址，标识为超链接，点击后会跳到 Email，发送邮件给此地址</div><div class="line">    Linkify.PHONE_NUMBERS -- 仅识别出 TextView 中的电话号码，标识为超链接，点击后会跳到 Dialer，Call 这个号码</div><div class="line">    Linkify.WEB_URLS-- 仅识别出 TextView 中的网址，标识为超链接，点击后会跳到 Browser 打开此 URL Linkify.ALL -- 这个选项是识别出所有系统所支持的特殊 Uri，然后做相应的操作</div></pre></td></tr></table></figure>
-<p> 特殊情况:<br>当一段文字部分是超链接或者我们需要点击超链接跳到另一个 Activity时，如何处理?</p>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> TextView testText;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_main);</div><div class="line">        testText = (TextView) findViewById(R.id.testText); </div><div class="line">        <span class="comment">//将TextView的显示文字设置为SpannableString</span></div><div class="line">        testText.setText(getClickableSpan());</div><div class="line">        <span class="comment">//设置该句使文本的超连接起作用</span></div><div class="line">        testText.setMovementMethod(LinkMovementMethod.getInstance());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//设置超链接文字</span></div><div class="line">    <span class="function"><span class="keyword">private</span> SpannableString <span class="title">getClickableSpan</span><span class="params">()</span> </span>&#123;</div><div class="line">        SpannableString spanStr = <span class="keyword">new</span> SpannableString(<span class="string">"使用该软件，即表示您同意该软件的使用条款和隐私政策"</span>); <span class="comment">//设置下划线文字</span></div><div class="line">        spanStr.setSpan(<span class="keyword">new</span> UnderlineSpan(), <span class="number">16</span>, <span class="number">20</span>, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); <span class="comment">//设置文字的单击事件</span></div><div class="line">        spanStr.setSpan(<span class="keyword">new</span> ClickableSpan() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View widget)</span> </span>&#123;</div><div class="line">                startActivity(<span class="keyword">new</span> Intent(MainActivity.<span class="keyword">this</span>, TestActivity1.class));</div><div class="line">            &#125;</div><div class="line">        &#125;, <span class="number">16</span>, <span class="number">20</span>, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line">        <span class="comment">//设置文字的前景色</span></div><div class="line">        spanStr.setSpan(<span class="keyword">new</span> ForegroundColorSpan(Color.WHITE), <span class="number">16</span>, <span class="number">20</span>, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); <span class="comment">//设置下划线文字</span></div><div class="line">        spanStr.setSpan(<span class="keyword">new</span> UnderlineSpan(), <span class="number">21</span>, <span class="number">25</span>, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line">        <span class="comment">//设置文字的单击事件</span></div><div class="line">        spanStr.setSpan(<span class="keyword">new</span> ClickableSpan() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View widget)</span> </span>&#123;</div><div class="line">                startActivity(<span class="keyword">new</span> Intent(MainActivity.<span class="keyword">this</span>, TestActivity2.class));</div><div class="line">            &#125;</div><div class="line">        &#125;, <span class="number">21</span>, <span class="number">25</span>, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line">        <span class="comment">//设置文字的前景色</span></div><div class="line">        spanStr.setSpan(<span class="keyword">new</span> ForegroundColorSpan(Color.WHITE), <span class="number">21</span>, <span class="number">25</span>, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line">        <span class="keyword">return</span> spanStr;</div><div class="line">    &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<ol>
-<li><p>Java 文件中字体加粗</p>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//Typeface </span></div><div class="line">textView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));</div><div class="line"><span class="comment">//use TextPaint</span></div><div class="line">textView.getPaint().setFakeBoldText(<span class="keyword">true</span>);</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="按钮控制-ViewPager-的左右翻页"><a href="#按钮控制-ViewPager-的左右翻页" class="headerlink" title="按钮控制 ViewPager 的左右翻页"></a>按钮控制 ViewPager 的左右翻页</h3><p>为了实现左右翻页的效果，使用了 ViewPager，它会很方便的实现左右滑动后翻页。 这时需要自己也加上两个 button 来实现同样的操作，如何实现呢?<br>通过查看 ViewPager 的源码，里面有一个公共方法 arrowScroll ，查看代码 们可以有两个重要的发现:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">executeKeyEvent</span><span class="params">(KeyEvent event)</span> </span>&#123;</div><div class="line">        <span class="keyword">boolean</span> handled = <span class="keyword">false</span>;</div><div class="line">        <span class="keyword">if</span> (event.getAction() == KeyEvent.ACTION_DOWN) &#123;</div><div class="line">            <span class="keyword">switch</span> (event.getKeyCode()) &#123;</div><div class="line">                <span class="keyword">case</span> KeyEvent.KEYCODE_DPAD_LEFT: <span class="comment">//键盘方向键左键的控制，向左翻页</span></div><div class="line">                    handled = arrowScroll(FOCUS_LEFT);<span class="comment">//FOCUS_LEFT:17</span></div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                <span class="keyword">case</span> KeyEvent.KEYCODE_DPAD_RIGHT:<span class="comment">//键盘方向键右键的控制，向右翻页</span></div><div class="line">                    handled = arrowScroll(FOCUS_RIGHT);<span class="comment">//FOCUS_RIGHT:66</span></div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                <span class="keyword">case</span> KeyEvent.KEYCODE_TAB:</div><div class="line">                    <span class="keyword">if</span> (event.hasNoModifiers()) &#123;</div><div class="line">                        handled = arrowScroll(FOCUS_FORWARD);<span class="comment">// 向前 -&gt; 右翻 FOCUS_FORWARD:2</span></div><div class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (event.hasModifiers(KeyEvent.META_SHIFT_ON)) &#123;</div><div class="line">                        handled = arrowScroll(FOCUS_BACKWARD);<span class="comment">// 向后 -&gt; 左翻 FOCUS_BACKWARD:1</span></div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> handled;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">arrowScroll</span><span class="params">(<span class="keyword">int</span> direction)</span> </span>&#123;</div><div class="line">        ...</div><div class="line">        <span class="keyword">if</span> (nextFocused != <span class="keyword">null</span> &amp;&amp; nextFocused != currentFocused) &#123;</div><div class="line">            <span class="keyword">if</span> (direction == View.FOCUS_LEFT) &#123;</div><div class="line">                ... <span class="comment">// 省略一些无关代码</span></div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (direction == View.FOCUS_RIGHT) &#123;</div><div class="line">                ... <span class="comment">// 省略一些无关代码</span></div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (direction == FOCUS_LEFT || direction == FOCUS_BACKWARD)&#123; <span class="comment">// 17 or 1 向左翻页</span></div><div class="line">            <span class="comment">// Trying to move left and nothing there; try to page.</span></div><div class="line">            handled = pageLeft();</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (direction == FOCUS_RIGHT || direction == FOCUS_FORWARD) &#123; <span class="comment">// 66 or 2 向右翻页</span></div><div class="line">            <span class="comment">// Trying to move right and nothing there; try to page.</span></div><div class="line">            handled = pageRight();</div><div class="line">        &#125;</div><div class="line">        ... <span class="comment">//省略一些无关代码</span></div><div class="line">        <span class="keyword">return</span> handled;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<p>也就是说， 我们调用 arrowScroll 方法用参数 1 或者 17 就可以实现向左翻页;参数 2 或 66 就可以实现向右翻页。 后记:<br>当你的 UI 中有 EditText 这种获得 focus 的 widget 时， 必须用 17 和 66，否则要报错。</p>
-<h3 id="获得屏幕物理尺寸、密度及分辨率"><a href="#获得屏幕物理尺寸、密度及分辨率" class="headerlink" title="获得屏幕物理尺寸、密度及分辨率"></a>获得屏幕物理尺寸、密度及分辨率</h3><h4 id="获取屏幕的宽高"><a href="#获取屏幕的宽高" class="headerlink" title="获取屏幕的宽高"></a>获取屏幕的宽高</h4><p>需要注意的原来经常使用的 getHeight() 与 getWidth() 已经不推荐使用了，建议使用 getSize()来替代。</p>
-<p>参数是一个返回参数，用以返回分辨率的 Point，这个 Point 也比较简单，我们只需要关注 x 和 y 这两个成员就可以了。<br>用法如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getSize</span><span class="params">(Point outSize)</span> </span>&#123; </div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">        updateDisplayInfoLocked();  </div><div class="line">        mDisplayInfo.getAppMetrics(mTempMetrics, mDisplayAdjustments);</div><div class="line">        outSize.x = mTempMetrics.widthPixels;</div><div class="line">        outSize.y = mTempMetrics.heightPixels;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>此外 <code>Display</code>又提供了另一个方法：<code>getRealSize()</code><br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getRealSize</span><span class="params">(Point outSize)</span> </span>&#123; </div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">        updateDisplayInfoLocked();</div><div class="line">        outSize.x = mDisplayInfo.logicalWidth; </div><div class="line">        outSize.y = mDisplayInfo.logicalHeight;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>从两个方法的实现上看是有区别的。那么差异究竟在哪里，下面做一些实验来验证一下。<br>当<code>Activity</code>的主题是全屏主题时<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">android:theme=<span class="string">"@android:style/Theme.Black.NoTitleBar.Fullscreen"</span> </div><div class="line">android:theme=<span class="string">"@android:style/Theme.NoTitleBar.Fullscreen"</span></div></pre></td></tr></table></figure></p>
-<p>二者返回的宽高是一样的，但是当不是全屏主题是，例如 <code>Activity</code> 主题有<code>ToolBar/ActionBar</code>时，二者返回的宽高就不一样了。<br>测试如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">getSize():</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getDisplaySize</span><span class="params">()</span> </span>&#123;</div><div class="line">    Point point = <span class="keyword">new</span> Point(); getWindowManager().getDefaultDisplay().getSize (point);     </div><div class="line">    Log.d(TAG,<span class="string">"the screen size is "</span>+point.toString());</div><div class="line">&#125;</div><div class="line"><span class="comment">// 结果如下 返回的高度是去掉 toolbar 的高度</span></div><div class="line">D/SecondActivity: <span class="function">the screen size is <span class="title">Point</span><span class="params">(<span class="number">1080</span>, <span class="number">1794</span>)</span></span></div><div class="line"></div><div class="line"><span class="title">getRealSize</span><span class="params">()</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">getDisplayInfomation</span><span class="params">()</span> &#123;</div><div class="line">    Point point = <span class="keyword">new</span> Point(); getWindowManager().getDefaultDisplay().getSize (point);</div><div class="line">    Log.d(TAG,<span class="string">"the screen size is "</span>+point.toString());</div><div class="line">&#125;</div><div class="line"><span class="comment">// 结果如下 是屏幕真实的宽高</span></div><div class="line">D/SecondActivity: <span class="function">the screen size is <span class="title">Point</span><span class="params">(<span class="number">1080</span>, <span class="number">1920</span>)</span></span></div></pre></td></tr></table></figure></p>
-<h4 id="屏幕尺寸，设备的物理屏幕尺寸"><a href="#屏幕尺寸，设备的物理屏幕尺寸" class="headerlink" title="屏幕尺寸，设备的物理屏幕尺寸"></a>屏幕尺寸，设备的物理屏幕尺寸</h4><ol>
-<li><p>屏幕尺寸，设备的物理屏幕尺寸<br> 现如今 <code>Android</code> 手机尺寸杂乱无章，有规则的，也有奇葩的尺寸，<a href="http://screensiz.es/" target="_blank" rel="external">手机屏幕尺寸</a> 这个网站，记录了一些 <code>Android、IOS</code> 屏幕的尺寸比例。<br> 不同的屏幕尺寸是可以通过采用相同的分辨率，它们之间的区别就在于<strong>密度(density)</strong>不同</p>
-</li>
-<li><p>那些搞晕你的单位：DPI / PPI / DP / PX<br> APP 中尺寸单位和各自的意思<br> | 尺寸单位  | 代表的意思   |<br> | ——–   | :—–  |<br> | px: pixel |【像素】  电子屏幕上组成一幅图画或照片的最基本单元|<br> | pt: ponit |   【点】印刷行业常用单位，等于1/72英寸   |<br> | ppi: pixel per inch |【每英寸像素数】  该值越高，则屏幕越细腻 |<br> | dpi: dot per inch |【每英寸像素数】  该值越高，则屏幕越细腻 |<br> | dp/dip:Density-independent pixel | 安卓开发用的长度单位，1dp表示在屏幕像素点密度为160ppi时1px长度 |<br> | sp: scale-independent pixel | 安卓开发用的字体大小单位| </p>
-<p> <strong>相互关系</strong></p>
-<ul>
-<li><p>pt 和 px</p>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span>pt = (DPI / <span class="number">72</span>)px</div></pre></td></tr></table></figure>
-<p> 当在 ps 中新建画布的分辨率为 72ppi(即72dpi),1pt = 1px</p>
-</li>
-<li><p>PPI 和 DPI<br> DPI 最初适用于衡量打印物上每英寸的点数密度。DPI 值越小图片越不精细。当 DPI 的概念用在计算机屏幕上时，就称为了 PPI。同理：PPI 就是计算机屏幕上每英寸可以显示的像素点的数量。因此，在电子屏幕中提到的 PPI 和 DPI 是一致的。</p>
- <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">可认为 DPI = PPI</div></pre></td></tr></table></figure>
-</li>
-<li><p>PPI 的计算方法<br>  <img src="http://upload-images.jianshu.io/upload_images/3303429-c7a1c80febcc85a9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ppi 的计算方法">    </p>
-</li>
-<li><p>px 和 dp<br>dp为安卓开发时的长度单位，根据不同的屏幕分辨率，与px有不同的对应关系。<br>dp的大小的定义为：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span>dp=（屏幕 ppi / <span class="number">160</span>）px</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ol>
-<pre><code>![DPI 与 PPI](https://github.com/xxtlant/BlogPicture/blob/master/android%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/dpi%E4%B8%8E%E5%AF%86%E5%BA%A6%E7%9A%84%E6%8D%A2%E7%AE%97.png?raw=true)
-
-- dp 和 sp
-dp和sp类似，都会随着屏幕大小和分辨率变化而改变，不同的是，在android中，dp表示长度单位，sp表示字体大小，在多数情况下
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span>dp=<span class="number">1</span>sp</div></pre></td></tr></table></figure>
-
-但是在文字尺寸是“大”或“超大”时，1sp&gt;1dp。
-</code></pre>
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/19/Android 开发实用小技巧/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1020,168 +969,6 @@ dp和sp类似，都会随着屏幕大小和分辨率变化而改变，不同的�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://sstlant.com/2017/04/26/Android-app内接入cocos-2dx-js-所遇问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="xxtlant">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="王菜花">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/04/26/Android-app内接入cocos-2dx-js-所遇问题/" itemprop="url">Android app内接入cocos 2dx-js 所遇问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-26T10:54:40+08:00">
-                2017-04-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            <!--noindex-->
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/04/26/Android-app内接入cocos-2dx-js-所遇问题/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2017/04/26/Android-app内接入cocos-2dx-js-所遇问题/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-              <!--/noindex-->
-            
-          
-
-          
-          
-             <span id="/2017/04/26/Android-app内接入cocos-2dx-js-所遇问题/" class="leancloud_visitors" data-flag-title="Android app内接入cocos 2dx-js 所遇问题">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>因项目原因，需要在应用内接入cocos2dx-js写的游戏，此前从未接触过此类需求，也不会js，特开此文，记录自己遇到的问题。（长久更新）</p>
-<p>1. 使用cocos Creator 编译android 项目报错</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/04/26/Android-app内接入cocos-2dx-js-所遇问题/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://sstlant.com/2017/04/26/Android 应用中实现 Cocos2dx 游戏的返回键监听/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1304,6 +1091,168 @@ public void onBackPressed() {
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/04/26/Android 应用中实现 Cocos2dx 游戏的返回键监听/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://sstlant.com/2017/04/26/Android-app内接入cocos-2dx-js-所遇问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="xxtlant">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="王菜花">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/04/26/Android-app内接入cocos-2dx-js-所遇问题/" itemprop="url">Android app内接入cocos 2dx-js 所遇问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-26T10:54:40+08:00">
+                2017-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            <!--noindex-->
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/26/Android-app内接入cocos-2dx-js-所遇问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2017/04/26/Android-app内接入cocos-2dx-js-所遇问题/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+              <!--/noindex-->
+            
+          
+
+          
+          
+             <span id="/2017/04/26/Android-app内接入cocos-2dx-js-所遇问题/" class="leancloud_visitors" data-flag-title="Android app内接入cocos 2dx-js 所遇问题">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>因项目原因，需要在应用内接入cocos2dx-js写的游戏，此前从未接触过此类需求，也不会js，特开此文，记录自己遇到的问题。（长久更新）</p>
+<p>1. 使用cocos Creator 编译android 项目报错</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/26/Android-app内接入cocos-2dx-js-所遇问题/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>

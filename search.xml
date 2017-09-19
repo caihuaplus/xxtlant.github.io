@@ -3,11 +3,12 @@
   
     
     <entry>
-      <title><![CDATA[Android 应用中实现 Cocos2dx 游戏的返回键监听]]></title>
+      <title><![CDATA[Android 开发实用小技巧]]></title>
       <url>/2017/09/19/Android%20%E5%BC%80%E5%8F%91%E5%AE%9E%E7%94%A8%E5%B0%8F%E6%8A%80%E5%B7%A7/</url>
       <content type="html"><![CDATA[<h3 id="文本与布局"><a href="#文本与布局" class="headerlink" title="文本与布局"></a>文本与布局</h3><ol>
 <li><p>字符串资源里的变量替换<br>当程序中使用字符串如第 345 页，我们不可能使用两个字符串资源如</p>
  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;string name="di"&gt;第&lt;/string&gt; </div><div class="line">&lt;string name="page"&gt;页&lt;/string&gt;</div></pre></td></tr></table></figure>
+ <a id="more"></a>
 <p>在 android 中有一个东西是 XLIFF，全称是 XML 本地化数据交换格式，英文是 XML Loca lization Interchange File Format。<br>用法很简单，如下所示</p>
  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;string name="page"&gt;第%1$s页&lt;/string&gt;</div><div class="line">程序中只要给变量赋值就好了，如下：</div><div class="line">String page = getString(R.string.page,"345");</div></pre></td></tr></table></figure>
 <p>要是有多个变量，如第 345 页 24 行 ? 这也好办，如下:</p>
@@ -62,7 +63,8 @@ dp和sp类似，都会随着屏幕大小和分辨率变化而改变，不同的�
 
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span>dp=<span class="number">1</span>sp</div></pre></td></tr></table></figure>
 
-但是在文字尺寸是“大”或“超大”时，1sp&gt;1dp。
+但是在文字尺寸是“大”或“超大”时，1sp &gt; 1dp。
+&lt;!--more--&gt;
 </code></pre>]]></content>
       
         <categories>
@@ -274,39 +276,6 @@ dp和sp类似，都会随着屏幕大小和分辨率变化而改变，不同的�
     </entry>
     
     <entry>
-      <title><![CDATA[Android app内接入cocos 2dx-js 所遇问题]]></title>
-      <url>/2017/04/26/Android-app%E5%86%85%E6%8E%A5%E5%85%A5cocos-2dx-js-%E6%89%80%E9%81%87%E9%97%AE%E9%A2%98/</url>
-      <content type="html"><![CDATA[<p>因项目原因，需要在应用内接入cocos2dx-js写的游戏，此前从未接触过此类需求，也不会js，特开此文，记录自己遇到的问题。（长久更新）</p>
-<p>1. 使用cocos Creator 编译android 项目报错</p>
-<a id="more"></a>
-<p>The “android” command is deprecated.<br>For manual SDK, AVD, and project management, please use Android Studio.<br>For command-line tools, use tools/bin/sdkmanager and tools/bin/avdmanager<br>Invalid or unsupported command “update project -t android-22 -p /Users/XXXX/Documents/XXXX/build/jsb-link/frameworks/runtime-src/proj.android-studio/app”<br>Supported commands are:<br>android list target<br>android list avd<br>android list device<br>android create avd<br>android move avd<br>android delete avd<br>android list sdk<br>android update sdk<br>Error running command, return code: 2.</p>
-<p>原因：是因为 sdk/tools的版本过高导致的，需要使用低版本的tools覆盖即可</p>
-<p>2. 在使用第三方封装好的框架时，如果框架内加载了其他第三方库，要注意里面库的版本，因为可能库的版本太低，导致没有新版本的方法从而报错。情况：在应用内跳转cocos2dx的游戏界面时，一直报错<br>java.lang.NoSuchMethodError: No virtual method newWebSocket<br>(Lokhttp3/Request;Lokhttp3/WebSocketListener;)<br>Lokhttp3/WebSocket; in class Lokhttp3/OkHttpClient; or its super classes (declaration of ‘okhttp3.OkHttpClient’ appears in /data/app/com.quangames.a.paiju-1/split_lib_dependencies_apk.apk:classes22.dex)</p>
-<p>是因为我使用的网络框架时封装好的OKGO,而OKGO中的OKHttp的版本是使用的3.4.1版，而 cocos2dx中封装的网络类需要使用3.5.0版本，版本过低导致方法不存在。</p>
-<p>3. 在进入cocos2dx-js的游戏界面后，点击游戏界面中的返回键，会导致app进程被杀死。</p>
-<p>// 游戏退出时，所调用的js代码<br>PaiJuAppClient.prototype.jsbEnd = function(){<br>if(DeviceUtils.isIOS()){<br>cc.director.stopAnimation();<br>jsb.reflection.callStaticMethod(“TGGameStaticController”,popVC”);<br>} else {<br>cc.director.end(); // android 调用方法<br>}<br>};<br>起初以为是 cc.director.end(); 导致应用被杀死，后改为使用反射调用本地activity 的方法</p>
-<p>jsb.reflection.callStaticMethod(“../GameActivity”, “stopGameControl”,”()V”);<br>但是app还是会被杀死，后经过google搜索，发现是由于点击退出，会调用Cocos2dxHelper中的terminateProces() ，导致进程被杀死，注释掉此行代码即可。<br>然后点击退出就会反射调用本地自己写的方法</p>
-<p>public static void terminateProcess() {<br>// android.os.Process.killProcess(android.os.Process.myPid());<br>}<br><!--more--></p>
-]]></content>
-      
-        <categories>
-            
-            <category> Android </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> Android </tag>
-            
-            <tag> cocos </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
       <title><![CDATA[Android 应用中实现 Cocos2dx 游戏的返回键监听]]></title>
       <url>/2017/04/26/Android%20%E5%BA%94%E7%94%A8%E4%B8%AD%E5%AE%9E%E7%8E%B0%20Cocos2dx%20%E6%B8%B8%E6%88%8F%E7%9A%84%E8%BF%94%E5%9B%9E%E9%94%AE%E7%9B%91%E5%90%AC/</url>
       <content type="html"><![CDATA[<p><span style="font-size: 12pt; font-family: 'courier new', courier, monospace;">在 Android 中实现返回键的监听，只要两种方式：</span></p>
@@ -393,6 +362,39 @@ public boolean onKeyDown(int keyCode, KeyEvent event) {
 
 <p> 就是这样。</p>
   <!--more-->]]></content>
+      
+        <categories>
+            
+            <category> Android </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Android </tag>
+            
+            <tag> cocos </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Android app内接入cocos 2dx-js 所遇问题]]></title>
+      <url>/2017/04/26/Android-app%E5%86%85%E6%8E%A5%E5%85%A5cocos-2dx-js-%E6%89%80%E9%81%87%E9%97%AE%E9%A2%98/</url>
+      <content type="html"><![CDATA[<p>因项目原因，需要在应用内接入cocos2dx-js写的游戏，此前从未接触过此类需求，也不会js，特开此文，记录自己遇到的问题。（长久更新）</p>
+<p>1. 使用cocos Creator 编译android 项目报错</p>
+<a id="more"></a>
+<p>The “android” command is deprecated.<br>For manual SDK, AVD, and project management, please use Android Studio.<br>For command-line tools, use tools/bin/sdkmanager and tools/bin/avdmanager<br>Invalid or unsupported command “update project -t android-22 -p /Users/XXXX/Documents/XXXX/build/jsb-link/frameworks/runtime-src/proj.android-studio/app”<br>Supported commands are:<br>android list target<br>android list avd<br>android list device<br>android create avd<br>android move avd<br>android delete avd<br>android list sdk<br>android update sdk<br>Error running command, return code: 2.</p>
+<p>原因：是因为 sdk/tools的版本过高导致的，需要使用低版本的tools覆盖即可</p>
+<p>2. 在使用第三方封装好的框架时，如果框架内加载了其他第三方库，要注意里面库的版本，因为可能库的版本太低，导致没有新版本的方法从而报错。情况：在应用内跳转cocos2dx的游戏界面时，一直报错<br>java.lang.NoSuchMethodError: No virtual method newWebSocket<br>(Lokhttp3/Request;Lokhttp3/WebSocketListener;)<br>Lokhttp3/WebSocket; in class Lokhttp3/OkHttpClient; or its super classes (declaration of ‘okhttp3.OkHttpClient’ appears in /data/app/com.quangames.a.paiju-1/split_lib_dependencies_apk.apk:classes22.dex)</p>
+<p>是因为我使用的网络框架时封装好的OKGO,而OKGO中的OKHttp的版本是使用的3.4.1版，而 cocos2dx中封装的网络类需要使用3.5.0版本，版本过低导致方法不存在。</p>
+<p>3. 在进入cocos2dx-js的游戏界面后，点击游戏界面中的返回键，会导致app进程被杀死。</p>
+<p>// 游戏退出时，所调用的js代码<br>PaiJuAppClient.prototype.jsbEnd = function(){<br>if(DeviceUtils.isIOS()){<br>cc.director.stopAnimation();<br>jsb.reflection.callStaticMethod(“TGGameStaticController”,popVC”);<br>} else {<br>cc.director.end(); // android 调用方法<br>}<br>};<br>起初以为是 cc.director.end(); 导致应用被杀死，后改为使用反射调用本地activity 的方法</p>
+<p>jsb.reflection.callStaticMethod(“../GameActivity”, “stopGameControl”,”()V”);<br>但是app还是会被杀死，后经过google搜索，发现是由于点击退出，会调用Cocos2dxHelper中的terminateProces() ，导致进程被杀死，注释掉此行代码即可。<br>然后点击退出就会反射调用本地自己写的方法</p>
+<p>public static void terminateProcess() {<br>// android.os.Process.killProcess(android.os.Process.myPid());<br>}<br><!--more--></p>
+]]></content>
       
         <categories>
             
