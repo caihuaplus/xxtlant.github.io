@@ -3,6 +3,130 @@
   
     
     <entry>
+      <title><![CDATA[React Native 开发环境搭建]]></title>
+      <url>/2017/11/05/React%20Native%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
+      <content type="html"><![CDATA[<p><img src="http://upload-images.jianshu.io/upload_images/281665-226ddf6afab5f41b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="React Native"></p>
+<h2 id="什么是-React-Native"><a href="#什么是-React-Native" class="headerlink" title="什么是 React Native"></a>什么是 React Native</h2><blockquote>
+<p>React Native (简称 RN)是 Facebook 于 2015 年开源的一套跨平台，动态更新的 JavaScript 框架。<br>口号是：Learn once, write anywhere: Build mobile apps with React<br>着力于提高多平台开发的开发效率 —— 仅需学习一次，编写任何平台。</p>
+</blockquote>
+ <a id="more"></a>
+<h2 id="搭建开发环境"><a href="#搭建开发环境" class="headerlink" title="搭建开发环境"></a>搭建开发环境</h2><p>我用的电脑是 MacBook,搭建的环境是 MacOS + Android 。<br>其他例如搭建 iOS, Windows, Linux 的环境，请参考 <a href="http://reactnative.cn/docs/0.49/getting-started.html#content" target="_blank" rel="external">React Native 中文网的搭建开发环境</a> , <a href="http://facebook.github.io/react-native/docs/getting-started.html" target="_blank" rel="external">React Native 官方的 Getting Started</a> 这两篇文章。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><h4 id="安装必须的软件"><a href="#安装必须的软件" class="headerlink" title="安装必须的软件"></a>安装必须的软件</h4><blockquote>
+<p>需要安装 Node.js , Watchman, React Native命令行界面, JDK 和 Android Studio</p>
+</blockquote>
+<h5 id="HomeBrew"><a href="#HomeBrew" class="headerlink" title="HomeBrew"></a>HomeBrew</h5><p><a href="https://brew.sh/" target="_blank" rel="external">Homebrew</a>, Mac 系统的包管理器，用于安装 NodeJS 和其他一些必需的工具软件</p>
+<blockquote>
+<p>/usr/bin/ruby -e “$(curl -fsSL <a href="https://raw.githubusercontent.com/Homebrew/install/master/install" target="_blank" rel="external">https://raw.githubusercontent.com/Homebrew/install/master/install</a>)”</p>
+</blockquote>
+<p>直接复制上述命令，在终端运行就可以了。<br>译注：在Max OS X 10.11（El Capitan)版本中，homebrew在安装软件时可能会碰到/usr/local目录不可写的权限问题。可以使用下面的命令修复：</p>
+<blockquote>
+<p>sudo chown -R `whoami` /usr/local</p>
+</blockquote>
+<h5 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h5><p>使用 HomeBrew 来安装<a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a></p>
+<blockquote>
+<p>brew install node</p>
+</blockquote>
+<p>安装完 node 后建议设置 npm 镜像以加速后面的过程（或使用科学上网工具）。注意：不要使用 cnpm！cnpm 安装的模块路径比较奇怪，packager不能正常识别！</p>
+<blockquote>
+<p>npm config set registry <a href="https://registry.npm.taobao.org" target="_blank" rel="external">https://registry.npm.taobao.org</a> –global<br>npm config set disturl <a href="https://npm.taobao.org/dist" target="_blank" rel="external">https://npm.taobao.org/dist</a> –global</p>
+</blockquote>
+<h5 id="Yarn、React-Native的命令行工具（react-native-cli）"><a href="#Yarn、React-Native的命令行工具（react-native-cli）" class="headerlink" title="Yarn、React Native的命令行工具（react-native-cli）"></a>Yarn、React Native的命令行工具（react-native-cli）</h5><p><a href="https://yarnpkg.com/zh-Hans/" target="_blank" rel="external">Yarn</a> 是 Facebook 提供的替代 npm 的工具，可以加速 node 模块的下载。React Native 的命令行工具用于执行创建、初始化、更新项目、运行打包服务（packager）等任务。</p>
+<blockquote>
+<p>npm install -g yarn react-native-cli</p>
+</blockquote>
+<p>安装完 yarn 后也要设置镜像源:</p>
+<blockquote>
+<p>yarn config set registry <a href="https://registry.npm.taobao.org" target="_blank" rel="external">https://registry.npm.taobao.org</a> –global<br>yarn config set disturl <a href="https://npm.taobao.org/dist" target="_blank" rel="external">https://npm.taobao.org/dist</a> –global</p>
+</blockquote>
+<p>如果你看到 <strong><code>EACCES: permission denied</code></strong> 这样的权限报错，那么请参照上文的 homebrew 译注，修复 <code>/usr/local</code> 目录的所有权：</p>
+<blockquote>
+<p>sudo chown -R `whoami` /usr/local</p>
+</blockquote>
+<p>安装完yarn之后就可以用 <code>yarn</code> 代替 <code>npm</code> 了，例如用 <code>yarn</code> 代替 <code>npm install</code> 命令，用 <code>yarn add</code> 某第三方库名代替 <code>npm install --save</code> 某第三方库名。 </p>
+<h5 id="Java-开发工具包"><a href="#Java-开发工具包" class="headerlink" title="Java 开发工具包"></a>Java 开发工具包</h5><p>React Native需要最新版本的Java SE开发工具包（JDK）。如果需要，<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="external">下载并安装JDK 8或更高版本</a>。</p>
+<h5 id="Android-开发环境"><a href="#Android-开发环境" class="headerlink" title="Android 开发环境"></a>Android 开发环境</h5><h6 id="1-安装-Android-Studio"><a href="#1-安装-Android-Studio" class="headerlink" title="1. 安装 Android Studio"></a>1. 安装 Android Studio</h6><p>下载并安装Android Studio 。如果可以科学上网，可以在<a href="https://developer.android.google.cn/index.html" target="_blank" rel="external">Android Developers</a> 下载，也可以在 <a href="http://www.android-studio.org/" target="_blank" rel="external">Android Studio 中文社区</a> 进行下载。<br>Android Studio包含了运行和测试React Native应用所需的Android SDK和模拟器。</p>
+<blockquote>
+<p>除非特别注明，请不要改动安装过程中的选项。比如Android Studio默认安装了 Android Support Repository，而这也是React Native必须的（否则在react-native run-android时会报appcompat-v7包找不到的错误）。</p>
+</blockquote>
+<p>安装过程中需要改动的选项:</p>
+<ul>
+<li>选择 <code>Custom</code> 选项:<br>  <img src="http://reactnative.cn/static/docs/0.49/img/react-native-android-studio-custom-install.png" alt="选择 Custom"></li>
+<li>勾选 <code>Performance</code> 和 <code>Android Virtual Device</code><br>  <img src="http://reactnative.cn/static/docs/0.49/img/react-native-android-studio-additional-installs.png" alt="选择"></li>
+<li>安装完成后，在 Android Studio 的启动欢迎界面中选择 <strong>Configure | SDK Manager</strong>。<br>  <img src="http://reactnative.cn/static/docs/0.49/img/react-native-android-studio-configure-sdk.png" alt="选择 SDK Manager"></li>
+<li>在 <code>SDK Platforms</code> 窗口中，选择 <code>Show Package Details</code>，然后在Android 6.0 (Marshmallow)中勾选<ul>
+<li><strong>Google APIs</strong></li>
+<li><strong>Android SDK Platform 23</strong></li>
+<li><strong>Intel x86 Atom_64 System Image</strong></li>
+<li><strong>Google APIs Intel x86 Atom_64 System Image</strong><br><img src="http://reactnative.cn/static/docs/0.49/img/react-native-android-studio-android-sdk-platforms.png" alt="勾选指定项"></li>
+</ul>
+</li>
+<li>在 <strong>SDK Tools</strong> 窗口中，选择 Show Package Details，然后在 Android SDK Build Tools 中勾选 <strong>Android SDK Build-Tools 23.0.1（必须是这个版本）</strong>。然后还要勾选最底部的 <strong>Android Support Repository</strong>.<br>  <img src="http://reactnative.cn/static/docs/0.49/img/react-native-android-studio-android-sdk-build-tools.png" alt="勾选 SDK Tools"></li>
+</ul>
+<h6 id="2-ANDROID-HOME-环境变量"><a href="#2-ANDROID-HOME-环境变量" class="headerlink" title="2. ANDROID_HOME 环境变量"></a>2. ANDROID_HOME 环境变量</h6><p>确保 <strong>ANDROID_HOME</strong> 环境变量正确地指向了你安装的 Android SDK 的路径。具体的做法是把下面的命令加入到 <code>~/.bash_profile</code> 文件中：(<strong>译注</strong>：~ 表示用户目录，即<code>/Users/你的用户名/</code>，而小数点开头的文件在 Finder 中是隐藏的，并且这个文件有可能并不存在。请在终端下使用 <code>vi ~/.bash_profile</code> 命令创建或编辑。如不熟悉 vi 操作，请点击<a href="http://www.eepw.com.cn/article/48018.htm" target="_blank" rel="external">这里</a> 学习）。如果你的命令行不是bash，而是例如 zsh 等其他，请使用对应的配置文件。</p>
+<blockquote>
+<p>如果你不是通过Android Studio安装的sdk，则其路径可能不同，请自行确定清楚。<br>export ANDROID_HOME=~/Library/Android/sdk</p>
+</blockquote>
+<p>然后使用下列命令使其立即生效（否则重启后才生效）：</p>
+<blockquote>
+<p>source ~/.bash_profile</p>
+</blockquote>
+<p>可以使用 <strong><code>echo $ANDROID_HOME</code></strong> 检查此变量是否已正确设置。</p>
+<h5 id="Watchman"><a href="#Watchman" class="headerlink" title="Watchman"></a>Watchman</h5><p><a href="https://facebook.github.io/watchman/docs/install.html" target="_blank" rel="external">Watchman</a>是由 Facebook 提供的监视文件系统变更的工具。安装此工具可以提高开发时的性能（packager可以快速捕捉文件的变化从而实现实时刷新）。</p>
+<blockquote>
+<p>brew install watchman</p>
+</blockquote>
+<h5 id="将Android-SDK的Tools目录添加到PATH变量中"><a href="#将Android-SDK的Tools目录添加到PATH变量中" class="headerlink" title="将Android SDK的Tools目录添加到PATH变量中"></a>将Android SDK的Tools目录添加到PATH变量中</h5><p>把 Android SDK 的 tools 和 platform-tools 目录添加到 <strong>PATH</strong> 变量中，以便在终端中运行一些 Android 工具，例如 <code>android avd</code> 或是 <code>adb logcat</code> 等。具体做法仍然是在 <code>~/.bash_profile</code> 中添加：</p>
+<blockquote>
+<p>export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools</p>
+</blockquote>
+<h4 id="其他可选的安装项"><a href="#其他可选的安装项" class="headerlink" title="其他可选的安装项"></a>其他可选的安装项</h4><h5 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h5><p>Git 版本控制。如若没有，则使用下列命令安装：</p>
+<blockquote>
+<p>brew install git</p>
+</blockquote>
+<h5 id="Nuclide"><a href="#Nuclide" class="headerlink" title="Nuclide"></a>Nuclide</h5><p><a href="https://nuclide.io/" target="_blank" rel="external">Nuclide</a> （此链接需要科学上网）是由 Facebook 提供的基于 <strong>atom</strong> 的集成开发环境，可用于编写、<a href="http://nuclide.io/docs/platforms/react-native/#running-applications" target="_blank" rel="external">运行</a>和 <a href="https://nuclide.io/docs/platforms/react-native/#debugging" target="_blank" rel="external">调试</a>React Native应用。</p>
+<p>点击这里阅读<a href="http://nuclide.io/docs/quick-start/getting-started/" target="_blank" rel="external">Nuclide的入门文档</a>。</p>
+<h5 id="Genymotion"><a href="#Genymotion" class="headerlink" title="Genymotion"></a>Genymotion</h5><p>Genymotion是一个性能更好的选择，但它只对个人用户免费。</p>
+<ol>
+<li>下载和安装<a href="https://www.genymotion.com/download" target="_blank" rel="external">Genymotion</a>（genymotion需要依赖VirtualBox虚拟机，下载选项中提供了包含VirtualBox和不包含的选项，请按需选择）。</li>
+<li>打开Genymotion。如果你还没有安装VirtualBox，则此时会提示你安装。</li>
+<li>创建一个新模拟器并启动。</li>
+<li>启动React Native应用后，可以按下⌘+M来打开开发者菜单</li>
+</ol>
+<h5 id="Gradle-Daemon"><a href="#Gradle-Daemon" class="headerlink" title="Gradle Daemon"></a>Gradle Daemon</h5><p>开启 <a href="https://docs.gradle.org/2.9/userguide/gradle_daemon.html" target="_blank" rel="external">Gradle Daemon</a> 可以极大地提升java代码的增量编译速度。</p>
+<blockquote>
+<p>touch ~/.gradle/gradle.properties &amp;&amp; echo “org.gradle.daemon=true” &gt;&gt; ~/.gradle/gradle.properties</p>
+</blockquote>
+<h2 id="测试安装"><a href="#测试安装" class="headerlink" title="测试安装"></a>测试安装</h2><blockquote>
+<p>react-native init AwesomeProject</p>
+<p>cd AwesomeProject</p>
+<p>react-native run-android</p>
+<p>提示：你可以使用–version参数创建指定版本的项目。例如 react-native init MyApp –version 0.39.2。注意版本号必须精确到两个小数点.</p>
+</blockquote>
+<p>你也可以在 <a href="https://nuclide.io/" target="_blank" rel="external">Nuclide</a> 中打开AwesomeProject文件夹然后<a href="http://nuclide.io/docs/platforms/react-native/#running-applications" target="_blank" rel="external">运行</a>。</p>
+<blockquote>
+<p>注意，react-native run-android 时，需要打开一个 Android 设备的模拟器，不然会报错</p>
+</blockquote>
+<h3 id="其他问题。"><a href="#其他问题。" class="headerlink" title="其他问题。"></a>其他问题。</h3><p>如果看完这些，还有其他问题，请查阅 <a href="http://reactnative.cn/" target="_blank" rel="external">React Native 中文网</a>，里面有详细的使用文档。<br>或者参阅 <a href="http://facebook.github.io/react-native/" target="_blank" rel="external">Facebook 的 React Native 的官方文档</a>.</p>
+<p>我也是一个初学者，谢谢。</p>
+ <!--more-->
+]]></content>
+      
+        <categories>
+            
+            <category> React Native </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> React Native </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Android 开发实用小技巧]]></title>
       <url>/2017/09/19/Android%20%E5%BC%80%E5%8F%91%E5%AE%9E%E7%94%A8%E5%B0%8F%E6%8A%80%E5%B7%A7/</url>
       <content type="html"><![CDATA[<h3 id="文本与布局"><a href="#文本与布局" class="headerlink" title="文本与布局"></a>文本与布局</h3><ol>
@@ -408,21 +532,6 @@ public boolean onKeyDown(int keyCode, KeyEvent event) {
             <tag> Android </tag>
             
             <tag> cocos </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Hello world!]]></title>
-      <url>/2017/03/19/hello-world/</url>
-      <content type="html"><![CDATA[<p>Welcome to WordPress. This is your first post. Edit or delete it, then start writing!</p>
-]]></content>
-      
-        
-        <tags>
-            
-            <tag> HelloWorld </tag>
             
         </tags>
         
