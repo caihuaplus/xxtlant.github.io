@@ -427,8 +427,7 @@
 
       
         
-          
-            <h4 id="以下内容，不需要编程基础"><a href="#以下内容，不需要编程基础" class="headerlink" title="以下内容，不需要编程基础"></a>以下内容，不需要编程基础</h4><ul>
+          <h4 id="以下内容，不需要编程基础"><a href="#以下内容，不需要编程基础" class="headerlink" title="以下内容，不需要编程基础"></a>以下内容，不需要编程基础</h4><ul>
 <li>需要用到的工具<ul>
 <li>可以访问 Google</li>
 <li>信用卡一张</li>
@@ -437,96 +436,13 @@
 </li>
 <li>如果没有科学上网工具，可以先下载使用 <a href="https://github.com/getlantern/forum/issues/833" target="_blank" rel="external">蓝灯免费版</a> 。</li>
 </ul>
-<h4 id="教程一共分为四步骤"><a href="#教程一共分为四步骤" class="headerlink" title="教程一共分为四步骤"></a>教程一共分为四步骤</h4><ol>
-<li>使用 Google Cloud 部署虚拟机</li>
-<li>升级VPS内核开启BBR</li>
-<li>搭建 Shadowsocks Server</li>
-<li>设置Shadowsocks server开机启动</li>
-</ol>
-<h3 id="一、-使用-Google-Cloud-部署虚拟机"><a href="#一、-使用-Google-Cloud-部署虚拟机" class="headerlink" title="一、 使用 Google Cloud 部署虚拟机"></a>一、 使用 Google Cloud 部署虚拟机</h3><h4 id="1-申请使用Google-Cloud"><a href="#1-申请使用Google-Cloud" class="headerlink" title="1.申请使用Google Cloud"></a>1.申请使用Google Cloud</h4><p>申请地址：<a href="https://cloud.google.com/free/" target="_blank" rel="external">点击此处</a></p>
-<p><img src="/img/Google Cloud 试用.jpg" alt="Google Cloud 试用"></p>
-<p><img src="/img/choose country.jpg" alt="选择国家"></p>
-<p><img src="/img/填写地址.jpg" alt=""></p>
-<p><img src="/img/填写信用卡.jpg" alt="填写地址以及信用卡信息"></p>
-<p>登陆 Google 账户，<strong>必须使用信用卡</strong>，而且不能使用虚拟卡，招商银行、中信银行的全币种卡、浦发银行的 VISA 卡均可以通过验证。理论上 VISA 卡均可获得通过，选择中国后绑定信用卡，填写个人信息，可如实填写信用卡账单地址。成功后会于扣款1刀，验证卡片后会返还。<br>GCD 现在免费赠送 300 刀期限是一年，也就是 300 刀和一年时间谁先用完就以谁为准，<strong>结束之后不点继续使用时不会扣费的</strong>。</p>
-<p>跳转后，如果你能看到页面顶部有一个“礼物 🎁 ” 的小图标，或者说你收到了相应的邮件，说明试用金已到账</p>
-<p><img src="/img/试用时间.jpg" alt="试用时间"></p>
-<p>上图是我的剩余试用时间以及剩余赠金</p>
-<h4 id="2-修改防火墙"><a href="#2-修改防火墙" class="headerlink" title="2.修改防火墙"></a>2.修改防火墙</h4><p>提前设置好后，后面设置完 ss 服务就可以直接使用了</p>
-<p>访问链接：<a href="https://console.cloud.google.com/networking/firewalls/list" target="_blank" rel="external">点击此处</a></p>
-<p>或者在菜单中依次点击【VPC 网络】 –&gt; 【防火墙规则】 –&gt; 【创建防火墙规则】</p>
-<p><img src="/img/创建防火墙规则.jpg" alt="创建防火墙规则.jpg"></p>
-<p>更改红色箭头指向的几项。<br>名称自己随意起，IP 地址范围：<strong>0.0.0.0/0</strong><br>点击创建会生成规则，请耐心等待。</p>
-<h4 id="3-获取静态IP"><a href="#3-获取静态IP" class="headerlink" title="3.获取静态IP"></a>3.获取静态IP</h4><p>获取静态 IP 很重要，只有有了静态IP，后面部署的SS服务才能用。</p>
-<p>设置地址:<a href="https://console.cloud.google.com/networking/addresses/list?project=allow-all-ip-port-xxtlant" target="_blank" rel="external">点击此处</a></p>
-<p>或者在菜单中依次点击【VPC 网络】 –&gt; 【外部 IP 地址】 –&gt; 【保留静态地址】</p>
-<p><img src="/img/保留静态地址.jpg" alt="保留静态地址.jpg"></p>
-<p><strong>名称自定义即可</strong></p>
-<p>PS：<strong>静态 IP 只能申请一个！！！</strong></p>
-<p>大陆速度最佳的机房是台湾彰化的机房了，asia-east1-c对大陆最友好<br>还有东京亚洲东区，也就是东京机房了asia-northeast1-a</p>
-<h4 id="4-创建计算引擎"><a href="#4-创建计算引擎" class="headerlink" title="4.创建计算引擎"></a>4.创建计算引擎</h4><p>设置地址:<a href="https://console.cloud.google.com/compute/instances" target="_blank" rel="external">点击此处</a></p>
-<p>或者在菜单中依次点击【计算引擎】–&gt; 【创建实例】</p>
-<p><img src="/img/创建计算实例.jpg" alt="创建计算实例.jpg"></p>
-<p>如图，机器类型选最便宜的<strong>微型</strong>就够用，启动磁盘选<strong>Ubuntu16.04LTS</strong>，我参照的教程是使用Ubuntu1604，所以我选择了这个。<br>点击蓝色箭头指向的 【管理、磁盘、网络、SSH 密钥】，去设置网络。</p>
-<p><img src="/img/设置网络.jpg" alt="设置网络.jpg"></p>
-<p><img src="/img/设置静态地址.jpg" alt="设置静态地址.jpg"></p>
-<p>按图所示，点击 主要内部 IP 的保留静态 IP 地址，然后选择刚才创建的静态 IP 即可。点击创建即可完成。<br>等待一会后，出现下图所示，即已经完成创建。</p>
-<p><img src="/img/实例.jpg" alt="实例.jpg"></p>
-<p>至此，第一步已经完成。</p>
-<h3 id="二、升级VPS内核开启BBR-这一步，我不懂，是参考搜到的教程来设定的"><a href="#二、升级VPS内核开启BBR-这一步，我不懂，是参考搜到的教程来设定的" class="headerlink" title="二、升级VPS内核开启BBR(这一步，我不懂，是参考搜到的教程来设定的)"></a>二、升级VPS内核开启BBR(这一步，我不懂，是参考搜到的教程来设定的)</h3><p>由于众所周知的原因，单纯部署完shadowsocks服务之后速度都不会太理想，即使你选择的是台湾、日本这种很好的线路，依然会存在丢包和不稳定的情况。</p>
-<p>点击上图创建实例完成后，右边的 SSH。会弹出一个页面，如下图：</p>
-<p><img src="/img/SSH 页面.jpg" alt="SSH 页面.jpg"></p>
-<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>进入 ssh 后，先获取 root 权限</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo –i</div></pre></td></tr></table></figure>
-<p>更新系统，两步分开执行，第二步耗时久一些</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt update</div><div class="line">apt upgrade</div></pre></td></tr></table></figure>
-<p>查看当前内核</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">uname –a</div></pre></td></tr></table></figure>
-<h4 id="启用BBR"><a href="#启用BBR" class="headerlink" title="启用BBR"></a>启用BBR</h4><p>写入配置 两步分开执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">echo &quot;net.core.default_qdisc=fq&quot; &gt;&gt; /etc/sysctl.conf</div><div class="line"></div><div class="line">echo &quot;net.ipv4.tcp_congestion_control=bbr&quot; &gt;&gt; /etc/sysctl.conf</div></pre></td></tr></table></figure>
-<p>配置生效</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysctl -p</div></pre></td></tr></table></figure>
-<p>检验</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lsmod | grep bbr</div></pre></td></tr></table></figure>
-<p>看到显示<code>tcp_bbr 20480 xx</code> 说明已经成功开启 BBR。<strong>不需要重新启动</strong></p>
-<p>至此，第二步已经结束，接下来直接开始在虚拟机部署 SS 服务。</p>
-<h3 id="三、搭建-Shadowsocks-Server"><a href="#三、搭建-Shadowsocks-Server" class="headerlink" title="三、搭建 Shadowsocks Server"></a>三、搭建 Shadowsocks Server</h3><p>首先更新一下 apt-get 软件包</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div></pre></td></tr></table></figure>
-<p>然后通过 apt-get 安装 python-pip</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install python-pip</div></pre></td></tr></table></figure>
-<p>完成之后使用 pip 安装 shadowsocks 服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo pip install shadowsocks</div></pre></td></tr></table></figure>
-<p><img src="/img/安装Shadowsocks.jpg" alt="安装Shadowsocks.jpg"></p>
-<p>说明安装成功了。</p>
-<p>然后我们需要创建一个 shadowsocks server 的配置文件，可以直接建在当前用户目录下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/ss-conf.json</div></pre></td></tr></table></figure>
-<p>回车之后会进入这个创建的文件，<br>按键盘上的 i 键会进入编辑，然后把下面的内容输入进去。<br>按ESC键会发现左下角的insert消失，<br>使用组合键 <strong>shift 加 ：</strong> ，这个组合键左下角出现<strong>：</strong>，然后输入 <strong>wq</strong> 回车就保存退出文件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">&quot;server&quot;:&quot;0.0.0.0&quot;,</div><div class="line">&quot;server_port&quot;:000,</div><div class="line">&quot;local_address&quot;:&quot;127.0.0.1&quot;,</div><div class="line">&quot;local_port&quot;:1080,</div><div class="line">&quot;password&quot;:&quot;123456&quot;,</div><div class="line">&quot;timeout&quot;:600,</div><div class="line">&quot;method&quot;:&quot;aes-256-cfb&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>将上面的内容复制到创建的文件里就可以了。</p>
-<font size="4"><strong>注意</strong><br>1. 代码的全部内容必须为<strong>英文半角输入</strong>，<br>2. <strong>server_port</strong>与<strong>password</strong>后面的数字内容<strong>请自己设定</strong>，这两个是你之后在shadowsocks客户端上配置使用的<strong>端口和密码</strong>。</font>
-
-<p>最后用这个配置文件启动 shadowsocks 服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ssserver -c /etc/ss-conf.json -d start</div></pre></td></tr></table></figure>
-<h3 id="四、开启-Shadowsocks-Server-开机启动"><a href="#四、开启-Shadowsocks-Server-开机启动" class="headerlink" title="四、开启 Shadowsocks Server 开机启动"></a>四、开启 Shadowsocks Server 开机启动</h3><p>服务器可能会自动重启，这样的话就需要每次手动开启SS服务，很麻烦而且还会遇到要用梯子但是梯子在墙外的这种困境，怎么办呢？那么我们进入第四步，写脚本让系统开机后自动启动ss服务。</p>
-<p>创建脚本 /etc/init.d/shadowsocks<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/init.d/shadowsocks</div></pre></td></tr></table></figure></p>
-<p>进入文件后添加以下内容,方法与前面创建ss-conf.json这个文件一样，使用键盘字母 <strong>i</strong> 键、<strong>shif 加 ：</strong>、<strong>wq</strong>回车保存等等</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">#!/bin/sh</div><div class="line">### BEGIN INIT INFO</div><div class="line"># Provides: shadowsocks</div><div class="line"># Required-Start: $remote_fs $syslog</div><div class="line"># Required-Stop: $remote_fs $syslog</div><div class="line"># Default-Start: 2 3 4 5</div><div class="line"># Default-Stop: 0 1 6</div><div class="line"># Short-Description: start shadowsocks</div><div class="line"># Description: start shadowsocks</div><div class="line">### END INIT INFO</div><div class="line">start()&#123;</div><div class="line">　　　ssserver -c /etc/ss-conf.json -d start</div><div class="line">&#125;</div><div class="line">stop()&#123;</div><div class="line">　　　ssserver -c /etc/ss-conf.json -d stop</div><div class="line">&#125;</div><div class="line">case “$1” in</div><div class="line">start)</div><div class="line">　　　start</div><div class="line">　　　;;</div><div class="line">stop)</div><div class="line">　　　stop</div><div class="line">　　　;;</div><div class="line">reload)</div><div class="line">　　　stop</div><div class="line">　　　start</div><div class="line">　　　;;</div><div class="line">*)</div><div class="line">　　　echo “Usage: $0 &#123;start|reload|stop&#125;”</div><div class="line">　　　exit 1</div><div class="line">　　　;;</div><div class="line">esac</div></pre></td></tr></table></figure>
-<p>然后增加这个文件的可执行权限</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo chmod +x /etc/init.d/shadowsocks</div></pre></td></tr></table></figure>
-<p>创建文件 /etc/init/shadowsocks.conf</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/init/shadowsocks.conf</div></pre></td></tr></table></figure>
-<p>内容直接复制如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">start on (runlevel [2345])stop on (runlevel [016])pre-start script</div><div class="line">/etc/init.d/shadowsocks start</div><div class="line">end script</div><div class="line"></div><div class="line">post-stop script</div><div class="line">/etc/init.d/shadowsocks stop</div><div class="line">end script</div></pre></td></tr></table></figure>
-<p>执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo update-rc.d shadowsocks defaults</div></pre></td></tr></table></figure>
-<p>然后就添加到开机启动中了<br>最后你可以 <strong>Reboot</strong> 测试一下看是否成功，若未成功就check一下第四步哪里有问题。</p>
-<p>至此搭建已经全部完成了。</p>
-<p><img src="/img/Youtube测试.jpg" alt="Youtube测试.jpg"></p>
-<h3 id="SSR-客户端-下载地址"><a href="#SSR-客户端-下载地址" class="headerlink" title="SSR 客户端 下载地址"></a>SSR 客户端 <a href="http://shadowsocks.org/en/download/clients.html" target="_blank" rel="external">下载地址</a></h3><p>直接下载文件</p>
-<p><a href="/img/ShadowsocksX-NG.1.7.1.zip">Mac 版</a></p>
-<p><a href="/img/com.github.shadowsocks.apk">Android</a></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/02/25/使用 Google Cloud 搭建一年免费 Shadowsocks 教程/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
