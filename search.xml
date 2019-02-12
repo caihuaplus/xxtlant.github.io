@@ -3,6 +3,200 @@
   
     
     <entry>
+      <title><![CDATA[HTTP 协议详解]]></title>
+      <url>/2019/02/12/HTTP%20%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/</url>
+      <content type="html"><![CDATA[<p><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1g03x0fvse0j3334223kjn.jpg" alt="HTTP"></p>
+<p>HTTP 的全称是 HyperText Transfer Protocol (超文本传输协议)的缩写，是一种建立在 TCP 上的无状态连接。HTTP 是互联网的<strong>基础协议</strong>，用于客户端与服务器之间的通信，它规定了客户端和服务器之间的<strong>通信格式</strong>，包括请求与响应的格式。<br> <a id="more"></a></p>
+<p>基本的工作流程是客户端发送一个 HTTP 请求，服务端收到请求开始处理，处理结束返回给客户端结果，客户端对结果进行处理并展示。</p>
+<p>现在最流行的 HTTP 版本还是 1997 年发布的 HTTP/1.1。<br><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1fyuos2jbzvj30fb051t90.jpg" alt=""></p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li>HTTP 的工作方式</li>
+<li>HTTP 的报文格式</li>
+<li>HTTP 起始行</li>
+<li>HTTP 请求方法</li>
+<li>HTTP 响应码</li>
+<li>HTTP Headers<h2 id="一、-HTTP-的工作方式"><a href="#一、-HTTP-的工作方式" class="headerlink" title="一、 HTTP 的工作方式"></a>一、 HTTP 的工作方式</h2><h3 id="1-1-请求过程"><a href="#1-1-请求过程" class="headerlink" title="1.1 请求过程"></a>1.1 请求过程</h3>客户端向服务端发送一段请求报文，服务端收到后，返回响应报文，客户端对响应内容进行展示。</li>
+</ul>
+<p><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1fyvp5x2xupj317g0nmdjm.jpg" width="80%/"></p>
+<p>一个 HTTP 的请求必定是<strong>由客户端发起，服务器端回复响应</strong>。服务器在没有接收到请求之前不会发送响应。</p>
+<blockquote>
+<p>名词解释</p>
+<p>客户端：请求访问文本或图像等资源的一端。</p>
+<p>服务端：提供资源响应的一端。</p>
+<p>资源：网络上的一切内容都是资源，无论是图片文字还是动态代码。</p>
+</blockquote>
+<h3 id="1-2-请求方式"><a href="#1-2-请求方式" class="headerlink" title="1.2 请求方式"></a>1.2 请求方式</h3><h4 id="web-浏览器请求："><a href="#web-浏览器请求：" class="headerlink" title="web 浏览器请求："></a>web 浏览器请求：</h4><p><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1fyvq039dv9j30gt048gn8.jpg" width="20%" height="20%"></p>
+<p>请求过程如下 ⬇️</p>
+<ol>
+<li>用户输入地址后回车或点击链接</li>
+<li>浏览器拼装 HTTP 报文并发送请求给服务器 </li>
+<li>服务器处理请求后，发送响应报文给浏览器 </li>
+<li>浏览器解析响应报文并使用渲染引擎显示到界面</li>
+</ol>
+<h4 id="APP-客户端请求："><a href="#APP-客户端请求：" class="headerlink" title="APP 客户端请求："></a>APP 客户端请求：</h4><p><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1fyvq1pw7d9j30u009utas.jpg" width="40%" height="40%"></p>
+<p>请求过程如下 ⬇️</p>
+<ol>
+<li>用户点击或界面自动触发联网需求</li>
+<li>Android 代码调用拼装 HTTP 报文并发送请求到服务器</li>
+<li>服务器处理请求后发送响应报文给手机</li>
+<li>Android 代码处理响应报文并作出相应处理(如储存数据、加工数据、显示数据到界面)</li>
+</ol>
+<h3 id="1-3-报文是什么"><a href="#1-3-报文是什么" class="headerlink" title="1.3 报文是什么"></a>1.3 报文是什么</h3><p>报文是在 HTTP 应用程序之间发送的<strong>数据块</strong>。这些数据块以一些文本的元信息 (meta 标签中的信息) 开头，描述了报文的内容及含义。</p>
+<p>每条报文都包含<strong>一条来自于客户端的请求，或者一条来自于服务端的响应</strong>。</p>
+<p>它由 3 部分组成：对报文进行描述的「<strong>起始行</strong>」、包含属性的「<strong>首部(Header)</strong>」以及可选的、包含数据的「<strong>主体(body)</strong>」</p>
+<p><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1fz1ph978fpj30nh0anwfy.jpg" alt=""></p>
+<h2 id="二、HTTP-的报文格式"><a href="#二、HTTP-的报文格式" class="headerlink" title="二、HTTP 的报文格式"></a>二、HTTP 的报文格式</h2><h3 id="2-1-请求报文的格式"><a href="#2-1-请求报文的格式" class="headerlink" title="2.1 请求报文的格式"></a>2.1 请求报文的格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;method&gt; &lt;path&gt; &lt;HTTP version&gt;</div><div class="line">&lt;headers&gt;</div><div class="line"></div><div class="line">&lt;entity-body&gt;</div></pre></td></tr></table></figure>
+<h3 id="2-2-响应报文的格式"><a href="#2-2-响应报文的格式" class="headerlink" title="2.2 响应报文的格式"></a>2.2 响应报文的格式</h3><p>(注意，<strong>只有起始行的语法与请求报文有所不同</strong>)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;HTTP version&gt; &lt;status code&gt; &lt;reason-phrase&gt;</div><div class="line">&lt;headers&gt;</div><div class="line"></div><div class="line">&lt;entity-body&gt;</div></pre></td></tr></table></figure>
+<p>下面是对各部分的简要描述，后面会详细介绍。</p>
+<ul>
+<li>方法 (method)<br>客户端希望服务器对资源执行的动作，常见的方法有 Get、Post、HEAD 等。</li>
+<li>请求路径 (path)<br>请求的 URL 描述了要对哪个资源执行这个方法，是给服务器看的。</li>
+<li>HTTP 版本(HTTP version)  </li>
+<li>状态码(status code)<br>不同状态码对应不同的响应状态</li>
+<li>原因短句(reason-phrase)<br>对状态码进行简单的描述。</li>
+<li>首部(headers)<br>包含许多键值对，是对响应数据的一些格式信息。</li>
+</ul>
+<h2 id="三、-Method-请求方法"><a href="#三、-Method-请求方法" class="headerlink" title="三、 Method(请求方法)"></a>三、 Method(请求方法)</h2><p>最常见的请求方法就是 <code>GET</code> 和 <code>POST</code>了。除此之外还有 <code>PUT</code>、<code>DELETE</code>、<code>HEAD</code> 等。</p>
+<h3 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h3><ul>
+<li>最常见的请求方式</li>
+<li>指定请求路径，向服务器请求资源</li>
+<li>只获取资源，不对服务器数据进行修改</li>
+<li>不发送 body</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GET  /users/1  HTTP/1.1</div><div class="line">Host: api.github.com</div></pre></td></tr></table></figure>
+<p>对应的 Retrofit 的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">@GET(&quot;/users/&#123;id&#125;&quot;)</div><div class="line">Call&lt;User&gt; getUser(@Path(&quot;id&quot;) String id, @Query(&quot;gender&quot;) String gender);</div></pre></td></tr></table></figure>
+<h3 id="Post"><a href="#Post" class="headerlink" title="Post"></a>Post</h3><ul>
+<li>用户增加或者修改资源</li>
+<li>包含 body，发送给服务器的内容写在 body 里面</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">POST  /users  HTTP/1.1</div><div class="line">Host: api.github.com</div><div class="line">Content-Type: application/x-www-form-urlencoded</div><div class="line">Content-Length: 13</div></pre></td></tr></table></figure>
+<p>对应的 Retrofit 的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@FormUrlEncoded</div><div class="line">@POST(&quot;/users&quot;)</div><div class="line">Call&lt;User&gt; addUser(@Field(&quot;name&quot;) String name, @Field(&quot;gender&quot;) String</div><div class="line">gender);</div></pre></td></tr></table></figure>
+<h3 id="PUT"><a href="#PUT" class="headerlink" title="PUT"></a>PUT</h3><ul>
+<li>用于修改资源</li>
+<li>包含 body，发送给服务器的内容写在 body 里面</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">PUT  /users/1  HTTP/1.1</div><div class="line">Host: api.github.com</div><div class="line">Content-Type: application/x-www-form-urlencoded</div><div class="line">Content-Length: 13</div></pre></td></tr></table></figure>
+<p>对应的 Retrofit 的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@FormUrlEncoded</div><div class="line">@PUT(&quot;/users/&#123;id&#125;&quot;)</div><div class="line">Call&lt;User&gt; updateGender(@Path(&quot;id&quot;) String id, @Field(&quot;gender&quot;) String</div><div class="line">gender);</div></pre></td></tr></table></figure>
+<h3 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h3><ul>
+<li>用于删除资源</li>
+<li>不发送 body</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">DELETE  /users/1  HTTP/1.1</div><div class="line">Host: api.github.com</div></pre></td></tr></table></figure>
+<p>对应的 Retrofit 的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">@DELETE(&quot;/users/&#123;id&#125;&quot;)</div><div class="line">Call&lt;User&gt; getUser(@Path(&quot;id&quot;) String id, @Query(&quot;gender&quot;) String gender);</div></pre></td></tr></table></figure>
+<h3 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h3><ul>
+<li><code>HEAD</code> 与 <code>GET</code> 的使用方式完全相同。</li>
+<li>区别在于，<code>HEAD</code> 请求的返回响应中没有 <code>Body</code></li>
+<li>用途：比如下载需求，返回的 Headers 中有下载内容的大小，可以用于显示进度。</li>
+</ul>
+<h3 id="小知识点"><a href="#小知识点" class="headerlink" title="小知识点"></a>小知识点</h3><p><code>GET</code>、<code>PUT</code>、<code>DELETE</code> 都是<strong>幂等</strong>操作，就是说，请求一次和请求多次的结果是一样的。<br>比如，GET 请求一个数据，请求一次和请求十次返回的结果是一样的，PUT 同样修改一个数据，修改一次和修改十次，结果也都是一样的。</p>
+<h2 id="四、状态码-status-code"><a href="#四、状态码-status-code" class="headerlink" title="四、状态码(status code)"></a>四、状态码(status code)</h2><p>状态码是对结果进行类型化的描述的，比如「请求成功」、「内容未找到」等<br>主要分为 5 类。</p>
+<h3 id="1xx：临时性消息。"><a href="#1xx：临时性消息。" class="headerlink" title="1xx：临时性消息。"></a>1xx：临时性消息。</h3>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">100：继续发送</div><div class="line">101：正在切换协议</div></pre></td></tr></table></figure>
+<h3 id="2xx：成功。"><a href="#2xx：成功。" class="headerlink" title="2xx：成功。"></a>2xx：成功。</h3>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">200：OK (最常见) </div><div class="line">201：创建成功</div></pre></td></tr></table></figure>
+<h3 id="3xx：重定向。"><a href="#3xx：重定向。" class="headerlink" title="3xx：重定向。"></a>3xx：重定向。</h3>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">301：域名永久移动</div><div class="line">302：暂时移动</div><div class="line">304：内容未改变，请求被重定向到客户端本地缓存</div></pre></td></tr></table></figure>
+<h3 id="4xx：客户端错误"><a href="#4xx：客户端错误" class="headerlink" title="4xx：客户端错误"></a>4xx：客户端错误</h3>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">400：客户端请求错误，服务器不理解请求的语法。</div><div class="line">401：未授权，要求进行身份验证。</div><div class="line">403：被禁止，服务器拒绝请求。</div><div class="line">404：找不到内容，服务器找不到请求的网页。(最常见)</div></pre></td></tr></table></figure>
+<h3 id="5xx：服务器错误"><a href="#5xx：服务器错误" class="headerlink" title="5xx：服务器错误"></a>5xx：服务器错误</h3>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">500：服务器内部错误 (最常见)</div><div class="line">503：服务不可用</div></pre></td></tr></table></figure>
+<h2 id="五、首部-Headers"><a href="#五、首部-Headers" class="headerlink" title="五、首部(Headers)"></a>五、首部(Headers)</h2><p>首部包含多个请求头，是用来描述消息的元数据(meta data)。</p>
+<p>首部字段有很多，主要分为以下几类：</p>
+<ul>
+<li>通用首部 =&gt; 提供了与报文相关的最基本的信息</li>
+<li>请求首部 =&gt; 只在请求报文中有意义的首部</li>
+<li>响应首部 =&gt; 只在响应报文中有意义的首部</li>
+<li>body 首部 =&gt; 描述 body 的首部</li>
+</ul>
+<p>下面我们就说一些比较常用的。</p>
+<h3 id="5-1-通用首部"><a href="#5-1-通用首部" class="headerlink" title="5.1 通用首部"></a>5.1 通用首部</h3><h4 id="Date"><a href="#Date" class="headerlink" title="Date"></a>Date</h4><p>提供日期和时间标志，说明报文是在什么时间创建的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Date: Tue, 12 Feb 2019 07:32:07 GMT</div></pre></td></tr></table></figure></p>
+<h4 id="Connection"><a href="#Connection" class="headerlink" title="Connection"></a>Connection</h4><p>允许客户端和服务器指定与请求/响应连接有关的选项。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Connection: keep-alive</div></pre></td></tr></table></figure></p>
+<h4 id="其他通用首部"><a href="#其他通用首部" class="headerlink" title="其他通用首部"></a>其他通用首部</h4><p><strong>Via</strong> : 显示报文经过的中间节点（代理、网关）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">via: cache25.l2ot7-1[0,304-0,H], cache25.l2ot7-1[1,0], cache5.us14[342,200-0,H]</div></pre></td></tr></table></figure></p>
+<p><strong>Transfer-Encoding</strong> : 告知接收端为了保证报文的可靠传输，对报文采用了什么编码方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Transfer-Encoding: chunked</div></pre></td></tr></table></figure></p>
+<p><strong>Cache-Control</strong> : 指定缓存的控制方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cache-control: no-store, no-cache, must-revalidate, proxy-revalidate</div></pre></td></tr></table></figure></p>
+<h3 id="5-2-请求首部"><a href="#5-2-请求首部" class="headerlink" title="5.2 请求首部"></a>5.2 请求首部</h3><h4 id="Host"><a href="#Host" class="headerlink" title="Host"></a>Host</h4><p>给出了接收请求的服务器的主机名和端口。(注意:不是在网络上用于寻址的，⽽是在目标服务器上定位子服务器。)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Host: api.github.com</div></pre></td></tr></table></figure></p>
+<h4 id="Accept"><a href="#Accept" class="headerlink" title="Accept"></a>Accept</h4><p>用来告诉<strong>服务端</strong>客户端会接受的媒体类型，包括客户端需要什么，可以使用什么，以及不想要什么。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</div><div class="line"></div><div class="line">&apos;*&apos; 用来表示通配符。</div><div class="line">;q= (q-factor weighting)</div><div class="line">值代表优先顺序，用相对质量价值表示，又称为权重。</div></pre></td></tr></table></figure>
+<h4 id="Accept-Charset"><a href="#Accept-Charset" class="headerlink" title="Accept-Charset"></a>Accept-Charset</h4><p>用来告知服务器，客户端可以处理的字符集类型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Accept-Charset: utf-8, iso-8859-1;q=0.5</div></pre></td></tr></table></figure></p>
+<h4 id="Accept-Encoding"><a href="#Accept-Encoding" class="headerlink" title="Accept-Encoding"></a>Accept-Encoding</h4><p>用来将客户端能够理解的内容编码方式告知服务器，服务端会选择一个客户端提议的方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Accept-Encoding: gzip, deflate, br</div><div class="line"></div><div class="line">gzip：表示采用 Lempel-Ziv coding (LZ77) 压缩算法，以及32位CRC校验的编码方式。</div><div class="line">compress：采用 Lempel-Ziv-Welch (LZW) 压缩算法。</div><div class="line">deflate：采用 zlib 结构和 deflate 压缩算法。</div><div class="line">br：表示采用 Brotli 算法的编码方式。</div><div class="line">identity：用于指代自身（例如：未经过压缩和修改）。除非特别指明，这个标记始终可以被接受。</div></pre></td></tr></table></figure></p>
+<h4 id="Accept-Language"><a href="#Accept-Language" class="headerlink" title="Accept-Language"></a>Accept-Language</h4><p>用来告诉服务器，客户端能够理解<strong>哪些语言</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Accept-Language: zh-CN,zh;q=0.9,en;q=0.8</div></pre></td></tr></table></figure>
+<h4 id="Range"><a href="#Range" class="headerlink" title="Range"></a>Range</h4><p>告诉服务器，客户端要获取哪段数据。<br>主要用于：<strong>断点续传</strong>、<strong>多线程下载</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">语法：</div><div class="line">Range: &lt;unit&gt;=&lt;range-start&gt;-&lt;range-end&gt;, &lt;range-start&gt;-&lt;range-end&gt;, &lt;range-start&gt;-&lt;range-end&gt;</div><div class="line">&lt;unit&gt;：范围所采用的单位，通常是字节（bytes）。</div><div class="line">&lt;range-start&gt;：一个整数，表示在特定单位下，范围的起始值。</div><div class="line">&lt;range-end&gt;：一个整数，表示在特定单位下，范围的结束值。这个值是可选的，如果不存在，表示此范围一直延伸到文档结束。</div><div class="line"></div><div class="line">Range: bytes=200-1000, 2000-6576, 19000-</div></pre></td></tr></table></figure></p>
+<h4 id="From"><a href="#From" class="headerlink" title="From"></a>From</h4><p>提供了客户端用户的 E-mail 地址，<br>用处：比如你有一个爬虫程序，那么 Form 首部应该随请求一起发送，这样的话，在服务器遇到问题的时候，例如爬虫发送了过量的、不希望收到的或者不合法的请求时，站点管理员可以联系到你。</p>
+<h3 id="5-3-响应首部"><a href="#5-3-响应首部" class="headerlink" title="5.3 响应首部"></a>5.3 响应首部</h3><h4 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h4><p>包含了处理请求的源头服务器所用到的软件相关信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Server: Apache-Coyote/1.1</div></pre></td></tr></table></figure></p>
+<h4 id="Set-Cookie"><a href="#Set-Cookie" class="headerlink" title="Set-Cookie"></a>Set-Cookie</h4><p>用来由服务器端向客户端发送 cookie。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">会话期 cookies 将会在客户端关闭时被移除。 </div><div class="line">会话期 cookie 不设置 Expires 或 Max-Age 指令</div><div class="line">Set-Cookie: sessionid=38afes7a8; HttpOnly; Path=/</div><div class="line"></div><div class="line">持久化 Cookie 不会在客户端关闭时失效，而是在特定的日期（Expires）或者经过一段特定的时间之后（Max-Age）才会失效。</div><div class="line"></div><div class="line">Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly</div></pre></td></tr></table></figure>
+<h4 id="Accept-Ranges"><a href="#Accept-Ranges" class="headerlink" title="Accept-Ranges"></a>Accept-Ranges</h4><p>响应中出现，表示服务器支持按字节来取范围数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">语法：</div><div class="line">Accept-Ranges: bytes</div><div class="line">Accept-Ranges: none</div><div class="line">none：不支持任何范围请求单位，由于其等同于没有返回此头部，因此很少使用。</div><div class="line">bytes：范围请求的单位是 bytes （字节）。</div><div class="line"></div><div class="line">Accept-Ranges: bytes</div></pre></td></tr></table></figure>
+<h3 id="5-4-Body-首部"><a href="#5-4-Body-首部" class="headerlink" title="5.4 Body 首部"></a>5.4 Body 首部</h3><p>由于请求与响应中都可以包含 body部分，所以在请求报文与响应报文中都可以出现这部分字段。</p>
+<h4 id="Location"><a href="#Location" class="headerlink" title="Location"></a>Location</h4><p>指定的是需要将页面重新定向至的地址。一般在响应码为 3xx 的响应中才会有意义。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Location: /index.html</div></pre></td></tr></table></figure></p>
+<h4 id="Content-Type"><a href="#Content-Type" class="headerlink" title="Content-Type"></a>Content-Type</h4><p>告诉客户端实际返回的内容的内容类型。<br><strong>主要分为一下 4 类:</strong></p>
+<ul>
+<li>text/html </li>
+</ul>
+<p>请求 Web ⻚面时返回响应的类型，Body 中返回 html 文本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 200 OK</div><div class="line">Content-Type: text/html; charset=utf-8</div><div class="line">Content-Length: 853</div><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;utf-8&quot;&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>x-www-form-urlencoded</li>
+</ul>
+<p>Web ⻚面纯⽂本表单的提交方式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">POST  /users  HTTP/1.1</div><div class="line">Host: api.github.com</div><div class="line">Content-Type: application/x-www-form-urlencoded</div><div class="line">Content-Length: 27</div><div class="line">name=xxtlant&amp;gender=male</div></pre></td></tr></table></figure>
+<ul>
+<li>multitype/form-data</li>
+</ul>
+<p>Web ⻚面含有⼆制⽂件时的提交方式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">POST  /users  HTTP/1.1</div><div class="line">Host: hencoder.com</div><div class="line">Content-Type: multipart/form-data; boundary=----</div><div class="line">WebKitFormBoundary7MA4YWxkTrZu0gW</div><div class="line">Content-Length: 2382</div><div class="line">------WebKitFormBoundary7MA4YWxkTrZu0gW</div><div class="line">Content-Disposition: form-data; name=&quot;name&quot;</div><div class="line">rengwuxian</div><div class="line">------WebKitFormBoundary7MA4YWxkTrZu0gW</div><div class="line">Content-Disposition: form-data; name=&quot;avatar&quot;; filename=&quot;avatar.jpg&quot;</div><div class="line">Content-Type: image/jpeg</div><div class="line">JFIFHHvOwX9jximQrWa......</div><div class="line">------WebKitFormBoundary7MA4YWxkTrZu0gW--</div></pre></td></tr></table></figure>
+<ul>
+<li>application/json , image/jpeg , application/zip …</li>
+</ul>
+<p>单项内容(⽂本或非⽂本都可以)，用于 Web Api 的响应或者 POST / PUT 的请求。</p>
+<blockquote>
+<p>请求中提交 JSON</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">POST /users HTTP/1.1</div><div class="line">Host: api.github.com</div><div class="line">Content-Type: application/json; charset=utf-8</div><div class="line">Content-Length: 38</div><div class="line">&#123;&quot;name&quot;:&quot;xxtlant&quot;,&quot;gender&quot;:&quot;male&quot;&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>响应中返回 JSON </p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Date: Tue, 12 Feb 2019 08:04:14 GMT</div><div class="line">Content-Type: application/json; charset=utf-8</div><div class="line">Transfer-Encoding: chunked</div><div class="line">Server: GitHub.com</div><div class="line">Status: 200 OK</div><div class="line"></div><div class="line">&#123;&quot;login&quot;: &quot;xxtlant&quot;,</div><div class="line">&quot;id&quot;: 18342980,</div><div class="line">&quot;node_id&quot;: &quot;MDQ6VXNlcjE4MzQyOTgw&quot;,</div><div class="line">&quot;avatar_url&quot;: &quot;https://avatars2.githubusercontent.com/u/18342980?v=4&quot;,</div><div class="line">&quot;gravatar_id&quot;: &quot;&quot;,</div><div class="line">....</div></pre></td></tr></table></figure>
+<blockquote>
+<p>请求中提交⼆进制内容</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">POST /user/1/avatar HTTP/1.1</div><div class="line">Host: hencoder.com</div><div class="line">Content-Type: image/jpeg</div><div class="line">Content-Length: 1575</div><div class="line">JFIFHH9......</div></pre></td></tr></table></figure>
+<blockquote>
+<p>相应中返回⼆进制内容</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 200 OK</div><div class="line">content-type: image/jpeg</div><div class="line">content-length: 1575</div><div class="line">JFIFHH9......</div></pre></td></tr></table></figure>
+<h4 id="Content-length"><a href="#Content-length" class="headerlink" title="Content-length"></a>Content-length</h4><p>用来指明发送给接收方的消息主体的大小。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Content-Length: &lt;length&gt;</div></pre></td></tr></table></figure>
+<h4 id="Content-Encoding"><a href="#Content-Encoding" class="headerlink" title="Content-Encoding"></a>Content-Encoding</h4><p>用于对特定媒体类型的数据进行压缩。<br>这个消息用来告知客户端应该怎样解码才能获取在 Content-Type 中的媒体类型内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Content-Encoding: gzip</div><div class="line"></div><div class="line">其值受 Accept-Encoding 影响</div></pre></td></tr></table></figure>
+<p>与此对应，Content-Language 也与 Accept-Language 对应。</p>
+<h2 id="六、参考链接"><a href="#六、参考链接" class="headerlink" title="六、参考链接"></a>六、参考链接</h2><ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP" target="_blank" rel="external">HTTP</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers" target="_blank" rel="external">HTTP Headers</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/08/http.html" target="_blank" rel="external">HTTP 协议入门</a><!--more-->
+</li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> HTTP </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Android </tag>
+            
+            <tag> HTTP </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[使用 Google Cloud 搭建一年免费 Shadowsocks 教程]]></title>
       <url>/2018/02/25/%E4%BD%BF%E7%94%A8%20Google%20Cloud%20%E6%90%AD%E5%BB%BA%E4%B8%80%E5%B9%B4%E5%85%8D%E8%B4%B9%20Shadowsocks%20%E6%95%99%E7%A8%8B/</url>
       <content type="html"><![CDATA[<h4 id="以下内容，不需要编程基础"><a href="#以下内容，不需要编程基础" class="headerlink" title="以下内容，不需要编程基础"></a>以下内容，不需要编程基础</h4><ul>
@@ -22,10 +216,10 @@
 <li>设置Shadowsocks server开机启动</li>
 </ol>
 <h3 id="一、-使用-Google-Cloud-部署虚拟机"><a href="#一、-使用-Google-Cloud-部署虚拟机" class="headerlink" title="一、 使用 Google Cloud 部署虚拟机"></a>一、 使用 Google Cloud 部署虚拟机</h3><h4 id="1-申请使用Google-Cloud"><a href="#1-申请使用Google-Cloud" class="headerlink" title="1.申请使用Google Cloud"></a>1.申请使用Google Cloud</h4><p>申请地址：<a href="https://cloud.google.com/free/" target="_blank" rel="external">点击此处</a></p>
-<p><img src="/img/Google Cloud 试用.jpg" alt="Google Cloud 试用"></p>
-<p><img src="/img/choose country.jpg" alt="选择国家"></p>
-<p><img src="/img/填写地址.jpg" alt=""></p>
-<p><img src="/img/填写信用卡.jpg" alt="填写地址以及信用卡信息"></p>
+<p><img src="../img/Google Cloud 试用.jpg" alt="Google Cloud 试用"></p>
+<p><img src="../img/choose country.jpg" alt="选择国家"></p>
+<p><img src="../img/填写地址.jpg" alt=""></p>
+<p><img src="../img/填写信用卡.jpg" alt="填写地址以及信用卡信息"></p>
 <p>登陆 Google 账户，<strong>必须使用信用卡</strong>，而且不能使用虚拟卡，招商银行、中信银行的全币种卡、浦发银行的 VISA 卡均可以通过验证。理论上 VISA 卡均可获得通过，选择中国后绑定信用卡，填写个人信息，可如实填写信用卡账单地址。成功后会于扣款1刀，验证卡片后会返还。<br>GCD 现在免费赠送 300 刀期限是一年，也就是 300 刀和一年时间谁先用完就以谁为准，<strong>结束之后不点继续使用时不会扣费的</strong>。</p>
 <p>跳转后，如果你能看到页面顶部有一个“礼物 🎁 ” 的小图标，或者说你收到了相应的邮件，说明试用金已到账</p>
 <p><img src="/img/试用时间.jpg" alt="试用时间"></p>
@@ -38,22 +232,22 @@
 <h4 id="3-获取静态IP"><a href="#3-获取静态IP" class="headerlink" title="3.获取静态IP"></a>3.获取静态IP</h4><p>获取静态 IP 很重要，只有有了静态IP，后面部署的SS服务才能用。</p>
 <p>设置地址:<a href="https://console.cloud.google.com/networking/addresses/list?project=allow-all-ip-port-xxtlant" target="_blank" rel="external">点击此处</a></p>
 <p>或者在菜单中依次点击【VPC 网络】 –&gt; 【外部 IP 地址】 –&gt; 【保留静态地址】</p>
-<p><img src="/img/保留静态地址.jpg" alt="保留静态地址.jpg"></p>
+<p><img src="../img/保留静态地址.jpg" alt="保留静态地址.jpg"></p>
 <p><strong>名称自定义即可</strong></p>
 <p>PS：<strong>静态 IP 只能申请一个！！！</strong></p>
 <p>大陆速度最佳的机房是台湾彰化的机房了，asia-east1-c对大陆最友好<br>还有东京亚洲东区，也就是东京机房了asia-northeast1-a</p>
 <h4 id="4-创建计算引擎"><a href="#4-创建计算引擎" class="headerlink" title="4.创建计算引擎"></a>4.创建计算引擎</h4><p>设置地址:<a href="https://console.cloud.google.com/compute/instances" target="_blank" rel="external">点击此处</a></p>
 <p>或者在菜单中依次点击【计算引擎】–&gt; 【创建实例】</p>
-<p><img src="/img/创建计算实例.jpg" alt="创建计算实例.jpg"></p>
+<p><img src="../img/创建计算实例.jpg" alt="创建计算实例.jpg"></p>
 <p>如图，机器类型选最便宜的<strong>微型</strong>就够用，启动磁盘选<strong>Ubuntu16.04LTS</strong>，我参照的教程是使用Ubuntu1604，所以我选择了这个。<br>点击蓝色箭头指向的 【管理、磁盘、网络、SSH 密钥】，去设置网络。</p>
-<p><img src="/img/设置网络.jpg" alt="设置网络.jpg"></p>
-<p><img src="/img/设置静态地址.jpg" alt="设置静态地址.jpg"></p>
+<p><img src="../img/设置网络.jpg" alt="设置网络.jpg"></p>
+<p><img src="../img/设置静态地址.jpg" alt="设置静态地址.jpg"></p>
 <p>按图所示，点击 主要内部 IP 的保留静态 IP 地址，然后选择刚才创建的静态 IP 即可。点击创建即可完成。<br>等待一会后，出现下图所示，即已经完成创建。</p>
-<p><img src="/img/实例.jpg" alt="实例.jpg"></p>
+<p><img src="../img/实例.jpg" alt="实例.jpg"></p>
 <p>至此，第一步已经完成。</p>
 <h3 id="二、升级VPS内核开启BBR-这一步，我不懂，是参考搜到的教程来设定的"><a href="#二、升级VPS内核开启BBR-这一步，我不懂，是参考搜到的教程来设定的" class="headerlink" title="二、升级VPS内核开启BBR(这一步，我不懂，是参考搜到的教程来设定的)"></a>二、升级VPS内核开启BBR(这一步，我不懂，是参考搜到的教程来设定的)</h3><p>由于众所周知的原因，单纯部署完shadowsocks服务之后速度都不会太理想，即使你选择的是台湾、日本这种很好的线路，依然会存在丢包和不稳定的情况。</p>
 <p>点击上图创建实例完成后，右边的 SSH。会弹出一个页面，如下图：</p>
-<p><img src="/img/SSH 页面.jpg" alt="SSH 页面.jpg"></p>
+<p><img src="../img/SSH 页面.jpg" alt="SSH 页面.jpg"></p>
 <h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>进入 ssh 后，先获取 root 权限</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo –i</div></pre></td></tr></table></figure>
 <p>更新系统，两步分开执行，第二步耗时久一些</p>
@@ -74,7 +268,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install python-pip</div></pre></td></tr></table></figure>
 <p>完成之后使用 pip 安装 shadowsocks 服务</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo pip install shadowsocks</div></pre></td></tr></table></figure>
-<p><img src="/img/安装Shadowsocks.jpg" alt="安装Shadowsocks.jpg"></p>
+<p><img src="../img/安装Shadowsocks.jpg" alt="安装Shadowsocks.jpg"></p>
 <p>说明安装成功了。</p>
 <p>然后我们需要创建一个 shadowsocks server 的配置文件，可以直接建在当前用户目录下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/ss-conf.json</div></pre></td></tr></table></figure>
@@ -99,7 +293,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo update-rc.d shadowsocks defaults</div></pre></td></tr></table></figure>
 <p>然后就添加到开机启动中了<br>最后你可以 <strong>Reboot</strong> 测试一下看是否成功，若未成功就check一下第四步哪里有问题。</p>
 <p>至此搭建已经全部完成了。</p>
-<p><img src="/img/Youtube测试.jpg" alt="Youtube测试.jpg"></p>
+<p><img src="../img/Youtube测试.jpg" alt="Youtube测试.jpg"></p>
 <h3 id="SSR-客户端-下载地址"><a href="#SSR-客户端-下载地址" class="headerlink" title="SSR 客户端 下载地址"></a>SSR 客户端 <a href="http://shadowsocks.org/en/download/clients.html" target="_blank" rel="external">下载地址</a></h3><p>直接下载文件</p>
 <p><a href="/img/ShadowsocksX-NG.1.7.1.zip">Mac 版</a></p>
 <p><a href="/img/com.github.shadowsocks.apk">Android</a><br><!--more--></p>
@@ -380,276 +574,6 @@ dp和sp类似，都会随着屏幕大小和分辨率变化而改变，不同的�
             <tag> Android </tag>
             
             <tag> Android Studio </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[记第一次与传销的正面接触]]></title>
-      <url>/2017/06/24/%E8%AE%B0%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%8E%E4%BC%A0%E9%94%80%E7%9A%84%E6%AD%A3%E9%9D%A2%E6%8E%A5%E8%A7%A6/</url>
-      <content type="html"><![CDATA[<blockquote>
-<p><em><strong>传销是指组织者发展人员，通过对被发展人员以其直接或者间接发展的人员数量或者业绩为依据计算和给付报酬，或者要求被发展人员以交纳一定费用为条件取得加入资格等方式获得财富的违法行为。</strong></em></p>
-<p><em><strong> –摘自百度百科</strong></em></p>
-</blockquote>
-<p><strong>上月末，好朋友告诉我说，他弟弟被传销了，发信息向他求救，打电话向廊坊报警，得到的回复是必须要到当地才可以报警立案，随后在他家乡和杭州报警询问，得到的结果都是说要到当地报警。于是马上一起去了河北廊坊，去寻求警方的帮助，然而后几天的经历才发现，’人民的名义’中那些正气的警察真的只是在电视中才会出现的，至少说我们是没有遇到的。</strong><br><a id="more"></a> </p>
-<hr>
-<p>2017-07-29 10:01:55</p>
-<p>一更，大约一个月之前，A 再次求救，说是现在已经领悟了，然后希望去救他，然后 A 的妈妈，去了廊坊，在当地警方一直不愿意去找的情况下，然后死磕派出所，然后虽然最终去找，但是并不在那里。</p>
-<p>A 是通过翻墙逃跑（翻墙是那个传销点的老大让他翻墙走，原因是怕警察找到这个点），然后出来的。</p>
-<p>最终得救。</p>
-<p>以上。</p>
-<hr>
-<p>以下称朋友的弟弟为 A 。</p>
-<ul>
-<li>5.31 上午到达河北廊坊。<br>到廊坊后，第一件事就是去廊坊市公安局报案，然后却被拦在市公安局门口不让进，然后保安态度恶劣，让我们打 110 报案，然后我们就在市公安局门口打 110 报案，然后电话是廊坊市新开路派出所接的，然后让我们到哪里去，我们问为什么市公安局不让进，为什么不能去公安局报案，要去派出所，得到的回复是，市公安局是他们所在的派出所管辖的辖区，市公安局不接待访客，让我们去派出所。</li>
-</ul>
-<p>虽然有点生气，但是为了营救 A，还是去了派出所，然后到达派出所后，进行身份登记后，我们把情况都告诉他们了，说了我们现在有定位，有求救信息，有电话可以进行定位，然后询问能不能立案，得到的回复却依然是不能，民警说，立案需要取证，需要进行侦查，然后只能尽力给我们协助，但不会负责到底，有案件管辖权的问题，然后我们又说，举报传销可不可以立案，民警依然是说不能，需要取证才可以。</p>
-<p>然后另一个民警，抽着烟翘着二郎腿，和我们说，可以在走失地报人口失踪，我们讲因为我们现在有时候还可以联系到 A，所以报不了人口失踪，又因为我们知道 A 在廊坊，而且报警也是让我们来这边才会受理，我们才来的。</p>
-<p>然后民警问我们现在知道的位置，然后说位置属于北旺派出所，让我们去那边。而且还问我们为什么会接待我们，我们回答，是因为我们报了案，他说，是因为我们在市公安局报了案，属于他们辖区，他们才接待的。</p>
-<p>之后我们打车去北旺派出所，觉得这些民警都不在乎，不在意这事情。</p>
-<p>到达北旺派出所后，被拦在了接待室，只能在接待室进行报案，和这个接待的民警说了这些情况，这个民警说我们来之前不久，也有一个人来报案，也是关于传销，是他妹妹被传销了，然后说了些廊坊有几大传销窝点，打击了好几次了，然后让我们留下了三分照片材料，说会给三个班都说一下，然后会把信息给领导，排警察进行摸查，确定了位置就会去取缔，然后让我们等消息。</p>
-<p><strong>第一天感觉并不好，觉得警察都不在意，对于亲属来说这是件天大的事情，然而对于他们来讲，感觉就是件司空见惯的事情，给人的感觉就是敷衍过去就可以了。</strong></p>
-<ul>
-<li>6.1 日第二天， 绝望的一天，<strong>比坏人更可恨的是，知道却不作为的警察。</strong><br>上午去广阳区工商局进行举报传销，然后到工商局的经检大队进行了举报传销，然后把已知的信息提供了，然后随口问了下市公安局可不可以进入，得到的答案居然是可以。</li>
-</ul>
-<p>随后我们又去廊坊市政府，想咨询下市公安局能不能进入，按我们的想法是市公安局作为一个政府机构，为什么不能接收群众的报案，哪怕是接收后分派到各辖区，然而询问市政府门前的民警们，也没有得到明确的答案，到底能不能进入，我们把昨天报案传销的经历告诉他们，他们讲如果有不作为的警察，可以去督察局举报他们。<br>再次给了我们一个希望。</p>
-<p>下午去派出所询问案件情况，两点半警察才上班，等到两点半后，去询问的结果居然是，他不知道，说是昨天的班没有告诉他，然后我们讲昨天留了三分材料，他说昨天的班没有和他交接，可能是和别人，然后让他问一下，也没有问，就说不知道，还说有情况会和我们联系，搞笑，连案情都不知道，怎么和我们联系，之后，我们在北旺派出所的一阴凉处准备给督察局反应，但是却被这个接待的民警给赶出派出所，让我们出去打。</p>
-<p>打广阳区电话，说要举报派出所，问举报电话时，接线员说不知道，给挂断了，再次打，告知了电话，却打了十几二十个都没人接，<strong>有点生气又绝望，警察不管，举报没人接，这就是真实的派出所吗。</strong></p>
-<p>后来又遇到四个人报案，同事被传销，然后三个同事和他父亲来报案，之后在那边聊了会，他们的报案路线和我们的一样。去市公安局报案不让进，转到新开路派出所，派出所再转到当地辖区。</p>
-<p>他们说已经去过大枣林看过，我们说了我们现在的情况，定位什么的都给他们看了，然后说想我们再一起去一下，但是他们却不想去了，也没有告诉我们多少信息，一直再问我们，同样的受害者却还不想相互帮助。</p>
-<p>再离派出所十几米的地方，有一个照相馆，传销报案需要把当事人照片打印出来，然后照相馆的人会给你个电话，是当地黑社会捞人的电话，给钱就可以把人捞出来。</p>
-<p>那个人的父亲好想是要通过这种方法来捞人。</p>
-<p>之后我们打算自己去看一下，没有找到好心的当地人，然后就打了一辆出租车去看，出租车司机知道我们的目的后，说他一侄女也被传销了，后来他去救的。我们跟着定位走，很轻易地就找到了定位上的地方，果然里面有一伙传销，但是却被发现了，打草惊蛇，本想让司机大哥帮助我们下，一起进去看看，但是司机不想去，我们只能冒着他们逃走的风险，去派出所报案。</p>
-<p>但是，遇到的居然是这种事情。</p>
-<p><strong>前段时间刚看完人民的名义，侯亮平带领几辆警车闯红灯，一路到机场拦截欧阳靖，我们本想，就算不是这样，第一时间赶到那里就可以了</strong>。</p>
-<p>但是。</p>
-<p>去派出所报案，民警听了，一点不着急，然后不急不忙的去开警车和我们一起去，然后，他们居然要先去中途办一件民事纠纷！！！因为他们之前没时间去！！！</p>
-<p>里面有三个警察，两个快退休的了，一个年轻一点，就这三个人，简直是民警的耻辱，我们说能不能先处理我们的案件，传销，A 的人身安全，去晚了就跑了，他们说跑不了，能跑到那里。我们说这是关系到 A 人身安全的问题，那个年轻的警察说，他这个也是人命关天，万一纠纷打架打死人呢。</p>
-<p>？？？</p>
-<p>特生气，然后他们到了后，下车后，我们两个想自己去，但是警车被锁住了，我们开不了，我们一直砸门喊他们开，过了一会才开，我们两个马上出去就走，他们告诉我们，处理完了。</p>
-<p>我TM，这就是你们的案情紧急。</p>
-<p>然后<strong>到那里，人跑了，留下一个人，一看就是放风的，这么简单的事情，警察居然不管不问，我们问那个人问题，警察不让我们问，我们让那个人那身份证，证明他身份，警察不让我们管，我们想让警察把那个人带回派出所询问，警察不带，什么都不问，不管。</strong></p>
-<p>知道他们的处理方式吗。<strong>就是拿锄头把那屋子里的水缸锅给砸了，呵呵，这就是办案方式？</strong></p>
-<p><strong>比坏人更可恨的是，知道还不作为的警察；知道是传销，却还不放在心上；人跑了，知道人说的是谎话，却连问都不问，敷衍了事的无作为；是一天天混吃等死，给警察拉低形象的混子。</strong></p>
-<p>最终无功而返，反而打草惊蛇。</p>
-<ul>
-<li>6.2 日，最后一天<br><strong>在此要特别感谢以为朋友的老乡，做自媒体的老乡，我们在去廊坊之前微博发过很多，联系很多微博大V，自媒体，回应的寥寥无几。这个老乡还是蛮好的，以个人身份给我们建议，给我们提供帮助，再次感谢</strong>。</li>
-</ul>
-<p>这天见到了他本人，聊了下关于传销的情况，廊坊这边很多很多。</p>
-<p>他也讲说把这件事和上面反应过，但是得到的回复是，现在廊坊在办书博会，不允许报道不好的事情。</p>
-<p>还有一件，当时我们看来很可怕的事情，6.1 日晚上，我朋友接到一短信，问我们是不是再找人，捞人可以找他，当时看到的时候，天呐，觉得廊坊这边太危险了，朋友电话除了在派出所和工商局留下过，其他就是滴滴打车时司机打过。</p>
-<p>据这个老乡讲，发短信这个是当地黑社会的。因为老乡L多次接触过传销，也救出来了一些人，他猜测捞人这么快的原因，一种可能是传销人员，然后他拉进去好多人，到一定的位置后，然后出来转行做这个，另一个是传销去找寻当地黑社会的保护，然后才会这么快找到。</p>
-<p>之后，去广阳区督察局，举报昨天遇到的民警的事情，因为我们都有录音，查证据我们也有，然而我们又想多了。<br>1. 第一件是昨天去询问案情，民警的态度及处理方式，然后督查室只是记下来了。</p>
-<p>2. 第二件就是去传销窝点的事情，然后我们说警察在中途去处理了民事纠纷，没有第一时间去窝点，我们讲可以分下轻重去执行，<br>得到的回应是，我们<strong>去派出所报案传销，派出所只能说协助，我们属于求助，然后其他人报案是属于派出所的案件，优先级比求助类高，派出所警力不够，只能按顺序来</strong>。<br><strong>然后说如果没有出警，我们可以向上级反应下，但是已经出警了，他们也没办法</strong></p>
-<p>3. 第三件照相馆会给人捞人的电话，然后这个得到的回应是，有很多群众反应这个情况，但是这个事情在法律上并没有明确的规定，所以也很难监管。</p>
-<p>4. 第四件事情问现在的传销能不能立案，得到的回应是去派出所报案，现在的传销都是求助类，还没有上升到一定的高度，就算抓到一个窝点，属于传销人员下线的，也处罚不了，只能记录他们身份，然后询问回不回家，就没有其他的了。</p>
-<p>然后说他们新来的局长很重视这块，正在狠抓传销，北旺是重点区域。</p>
-<p>然后，反应完，也感觉并没有什么用。</p>
-<p>之后去火车站，打算回去。</p>
-<p>然后我们想到要不要骗A说，朋友自己来了这边，看他过不过来，开始不接电话，后来，说来。</p>
-<p>然后我们去求助火车站的警察，希望 A 来了后，可以帮忙一起抓住。</p>
-<p>后来人来了，然后也抓住他了。</p>
-<p>然后朋友和开始和他讲，不听。</p>
-<p>他说就算是带他回去，他也会再回来。</p>
-<p>然后我们打算强制带他回去，然后在火车站进站时，然后..我们就打起来了..</p>
-<blockquote>
-<p><em><strong>中国式传销 是虚假的公司，虚构的产品，什么都是空的，就只是让你拉人头，从入会费或者加盟费中提取少量提成。或者控制人身自由，没收财物，让你无法与外界联系，天天学习那些传销培训教材，让你学会怎么骗人，然后列名单、电话或书信邀约、摊牌、跟进、直至以各种方式交齐入会费或者加盟费。</strong></em></p>
-<p><em><strong>现在的中国式传销是建立在精神控制的基础上，即让你通过他们的传销培训洗脑后自发的去组织进行传销；另外一些会控制你的人身自由，没收所有物品，并且通过暴力使你认可这些谎言。</strong></em></p>
-<p><em><strong>摘自 百度百科 传销的发展形成</strong></em><br>后来朋友一直在和他讲，A 也讲了一些事情，初中的时候被人打，回家又没敢讲，最终导致不读书了。</p>
-</blockquote>
-<p>然后 A 说是想为家里好，但是不承认自己做的是错的路，一直说不回去，回去也会回来，说之前求助是因为觉得自己受不了那苦，然后又说不回去是他不受苦将来家里就会受苦，然后我们讲，受苦但是要受对方向，然后我们告诉他方向错误了，他不信也不听，然后怎么说都不听，怎么着怎么着。</p>
-<p>然后后来朋友在和 A 一直讲，但是 A 就是不回去，说自己也搜过传销那些事情，但是他没有骗人去，所以才没有钱，是觉得在哪可以学到东西。</p>
-<p>然后后来朋友让他回家看下妈妈，他说会回去但不是现在。</p>
-<p>讲要是强行带他回去，他回去看一下，然后再回来。然后说一些不要干涉他之类的话，然后还说要和朋友断绝关系，去法院签断绝关系责任书，</p>
-<p>我们两个，商量，既然他要自己选，就让他自己选，回家看一下他妈妈，还是不回去。</p>
-<p>他选择了不回去，说自己的选择，你们拦住没有用。</p>
-<p>我们两个也决定既然他那么不肯回去，就给他自己选择的机会。</p>
-<p>也不知道这样是不是校园暴力给他造成的要想我，还是家庭教育造成的影响，还是自己走偏了。</p>
-<p><strong>第一次正面面对传销，感受深刻，不知道到底是什么手段，会让一个人如此相信，即使和最亲近的人断绝关系也要相信这个。</strong></p>
-<p><strong>我们也有想过可能会带不回来，结果虽然有点难过，但我们还是没有后悔的。</strong></p>
-<p><strong>最生气的是，对于警察这一块。</strong></p>
-<p><strong>警察的无作为，不在意，尤其是北旺派出所那几个民警，态度以及方法，都让人生气。</strong></p>
-<p><strong>第一次体会到一个普通人在进行报案，维权的时候，作为受人民信任的警察，在面对群众举报的时候，毫不在意，真的是一颗老鼠屎坏了一锅粥。</strong></p>
-<p><strong>从去廊坊时相信警察会帮忙找人，到自己这几天的经历，民警的敷衍，无作为，不在意，不追究，在去了传销窝点后，不去审问剩下的那一人，而是毫无责任感的砸掉水缸，赶走那人，但是这有什么意义呢。</strong></p>
-<p><strong>电视上到处都是，警察是好人，会帮助有难的人民，连电影审查都规定警察不能是坏人，但是电视剧电影中，警察形象树立的再好又有什么用呢，亲自体验一次之后，心中的形象越好，崩塌的越厉害。还是提高下警察的责任感，努力打击坏人坏事才是最重要的。</strong></p>
-<p><strong>经过这次事情，感想就是，在廊坊遇到的这些事情，导致我再也不想去那边。还有就是 相信警察都是好人，有事找警察 的这种思想，我应该已经没有了。</strong></p>
-<p><strong>以上。</strong><br> <!--more--> </p>
-]]></content>
-      
-        <categories>
-            
-            <category> 生活 </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> 生活 </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[IOS 播放 android 录制的 amr 格式语音问题]]></title>
-      <url>/2017/06/20/IOS%20%E6%92%AD%E6%94%BE%20android%20%E5%BD%95%E5%88%B6%E7%9A%84%20amr%20%E6%A0%BC%E5%BC%8F%E8%AF%AD%E9%9F%B3%E9%97%AE%E9%A2%98/</url>
-      <content type="html"><![CDATA[<p>项目在接入融云进行聊天时，android 发送的语音格式为 amr 格式，IOS 发送的格式为 wav 格式。</p>
-<p>在进行语音聊天时，android 发送的语音消息，本地播放没有问题。IOS 播放有杂音。</p>
-<p>在确定录制的 amr 格式的源文件可以在 IOS 上播放后，大约确定为传输过程中的编码问题。<br> <a id="more"></a></p>
-<p>原因是因为 android 中 MediaRecorder 的编码格式以及输出文件格式设置错误，不是设置的 AMR 格式。<br>将 MediaRecorder 的音频设置，设置为 AMR 即可</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">// 设置所录制的声音的采样率。</div><div class="line">mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);</div><div class="line">/**设置音频文件的编码：AAC/AMR_NB/AMR_MB/Default 声音的（波形）的采样 */</div><div class="line">mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);</div><div class="line">/ **</div><div class="line">  * 设置输出文件的格式：THREE_GPP/MPEG-4/RAW_AMR/Default THREE_GPP(3gp格式</div><div class="line">  * ，H263视频/ARM音频编码)、MPEG-4、RAW_AMR(只支持音频且音频编码要求为AMR_NB)</div><div class="line">  */</div><div class="line">mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);</div><div class="line">// 文件保存地址及名字</div><div class="line">targetFile = new File(targetDir, targetName);</div><div class="line">//设置输出文件的路径</div><div class="line">mMediaRecorder.setOutputFile(targetFile.getPath());</div><div class="line">// 设置录制的音频通道数</div><div class="line">mMediaRecorder.setAudioChannels(1);</div><div class="line">// 设置所录制的声音的采样率。</div><div class="line">mMediaRecorder.setAudioSamplingRate(8000);</div><div class="line">// 设置所录制的声音的编码位率。</div><div class="line">mMediaRecorder.setAudioEncodingBitRate(64);</div></pre></td></tr></table></figure>
- <!--more-->]]></content>
-      
-        <categories>
-            
-            <category> Android </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> Android </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Android 应用中实现 Cocos2dx 游戏的返回键监听]]></title>
-      <url>/2017/04/26/Android%20%E5%BA%94%E7%94%A8%E4%B8%AD%E5%AE%9E%E7%8E%B0%20Cocos2dx%20%E6%B8%B8%E6%88%8F%E7%9A%84%E8%BF%94%E5%9B%9E%E9%94%AE%E7%9B%91%E5%90%AC/</url>
-      <content type="html"><![CDATA[<p><span style="font-size: 12pt; font-family: 'courier new', courier, monospace;">在 Android 中实现返回键的监听，只要两种方式：</span></p>
-<p><span style="font-size: 12pt; font-family: 'courier new', courier, monospace;">方式 1 ：监听返回键;</span></p>
-<pre class="toolbar:2 plain:false lang:default decode:true">@Override
-public void onBackPressed() {
-    super.onBackPressed();
-}</pre>
-<span style="font-size: 12pt; font-family: 'courier new', courier, monospace;">
- <a id="more"></a>
-方式 2 ：重写 keyDown() 方法，监听 KeyEvent 事件 ;</span>
-<pre class="toolbar:2 plain:false lang:default decode:true ">//重写 keydown 事件
-public boolean onKeyDown(int keyCode, KeyEvent event) {
-if (keyCode == KeyEvent.KEYCODE_BACK) {
-   if ((System.currentTimeMillis() - mkeyTime) &gt; 2000) {
-            // 退出操作
-        }
-    }
-}</pre>
-<span style="font-family: 'courier new', courier, monospace; font-size: 12pt;">但是，在 Android studio 打开 Cocos2dx 游戏的 studio 版本后，无路是方式 1 还是方式 2 都无法监听到返回键的操作。</span>
-
-<span style="font-family: 'courier new', courier, monospace; font-size: 12pt;">原因是因为在 Cocos2dx 下的  GLSurfaceView 类中，实现了  keyDown() 方法，导致事件在上层已经被处理掉了。</span>
-<pre class="font-size:10 line-height:13 toolbar:2 plain:false show-plain:1 scroll:true lang:default decode:true ">GLSurfaceView.java
-
-@Override
-public boolean onKeyDown(final int pKeyCode, final KeyEvent pKeyEvent) {
-    switch (pKeyCode) {
-        case KeyEvent.KEYCODE_BACK:
-            Cocos2dxVideoHelper.mVideoHandler.sendEmptyMessage(Cocos2dxVideoHelper.KeyEventBack);
-         ....// 其他省略
-        default:
-            return super.onKeyDown(pKeyCode, pKeyEvent);
-    }
-}</pre>
-<span style="font-family: 'courier new', courier, monospace;">在官方 API 中关于 keyDown() 的描述是 ：</span>
-> public boolean onKeyDown (int keyCode, KeyEvent event)
-> 
-> 
-> <span style="color: #ff0000;">**Called when a key was pressed down and not handled by any of the views inside of the activity.**</span> So, for example, key presses while the cursor is inside a TextView will not trigger the event (unless it is a navigation to another object) because TextView handles its own key presses.
-> 
-> 
-> If the focused view didn't want this event, this method is called.
-<span style="font-family: 'courier new', courier, monospace;">标记部分的文字翻译的意思是：当用户按下一个按键的时候调用，但是前提是这个事件没有被其他的任何 views 监听并处理。</span>
-
-<span style="font-family: 'courier new', courier, monospace;">因为在 Cocos2dx 中的 GLSurfaceView 实现了 keyDown() 方法，处理了事件，所以我们的监听事件获取不到事件的返回值。</span>
-
-<span style="font-family: 'courier new', courier, monospace;">如何让我们的监听可以获取到事件呢？很简单，只需要在 GLSurfaceView 的 keyDown() 方法中，在监听到KeyEvent.KEYCODE_BACK 时，不作处理即可(return false).</span>
-
-<span style="font-family: 'courier new', courier, monospace;">改为如下代码 :</span>
-<pre class="font:courier-new font-size:10 line-height:13 toolbar:2 plain:false lang:default decode:true">@Override
-public boolean onKeyDown(final int pKeyCode, final KeyEvent pKeyEvent) {
-    switch (pKeyCode) {
-        case KeyEvent.KEYCODE_BACK:
-            Cocos2dxVideoHelper.mVideoHandler.sendEmptyMessage(Cocos2dxVideoHelper.KeyEventBack);
-            return false;
-         ....// 其他省略
-        default:
-            return super.onKeyDown(pKeyCode, pKeyEvent);
-    }
-}</pre>
-<span style="font-family: 'courier new', courier, monospace;">这样之后，在 Cocos2dx 下的 AppActivity 中就可以监听到返回键了，重写 keyDown() 方法。</span>
-<pre class="toolbar:2 plain:false lang:default decode:true ">private long mkeyTime = 0;
-/**
- * 监听Back键按下事件
- * 注意:
- * 返回值表示:是否能完全处理该事件
- * 在此处返回false,所以会继续传播该事件.
- * 在具体项目中此处的返回值视情况而定.
- */
-@Override
-public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK) {
-        if ((System.currentTimeMillis() - mkeyTime) &gt; 2000) {
-            mkeyTime = System.currentTimeMillis();
-            Toast.makeText(this, "再按一次确认退出", Toast.LENGTH_LONG).show();
-        } else {
-            finish();
-        }
-        return false;
-    } else {
-        return super.onKeyDown(keyCode, event);
-    }
-}</pre>
-
-<p> 就是这样。</p>
-  <!--more-->]]></content>
-      
-        <categories>
-            
-            <category> Android </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> Android </tag>
-            
-            <tag> cocos </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Android app内接入cocos 2dx-js 所遇问题]]></title>
-      <url>/2017/04/26/Android-app%E5%86%85%E6%8E%A5%E5%85%A5cocos-2dx-js-%E6%89%80%E9%81%87%E9%97%AE%E9%A2%98/</url>
-      <content type="html"><![CDATA[<p>因项目原因，需要在应用内接入cocos2dx-js写的游戏，此前从未接触过此类需求，也不会js，特开此文，记录自己遇到的问题。（长久更新）</p>
-<p>1. 使用cocos Creator 编译android 项目报错</p>
-<a id="more"></a>
-<p>The “android” command is deprecated.<br>For manual SDK, AVD, and project management, please use Android Studio.<br>For command-line tools, use tools/bin/sdkmanager and tools/bin/avdmanager<br>Invalid or unsupported command “update project -t android-22 -p /Users/XXXX/Documents/XXXX/build/jsb-link/frameworks/runtime-src/proj.android-studio/app”<br>Supported commands are:<br>android list target<br>android list avd<br>android list device<br>android create avd<br>android move avd<br>android delete avd<br>android list sdk<br>android update sdk<br>Error running command, return code: 2.</p>
-<p>原因：是因为 sdk/tools的版本过高导致的，需要使用低版本的tools覆盖即可</p>
-<p>2. 在使用第三方封装好的框架时，如果框架内加载了其他第三方库，要注意里面库的版本，因为可能库的版本太低，导致没有新版本的方法从而报错。情况：在应用内跳转cocos2dx的游戏界面时，一直报错<br>java.lang.NoSuchMethodError: No virtual method newWebSocket<br>(Lokhttp3/Request;Lokhttp3/WebSocketListener;)<br>Lokhttp3/WebSocket; in class Lokhttp3/OkHttpClient; or its super classes (declaration of ‘okhttp3.OkHttpClient’ appears in /data/app/com.quangames.a.paiju-1/split_lib_dependencies_apk.apk:classes22.dex)</p>
-<p>是因为我使用的网络框架时封装好的OKGO,而OKGO中的OKHttp的版本是使用的3.4.1版，而 cocos2dx中封装的网络类需要使用3.5.0版本，版本过低导致方法不存在。</p>
-<p>3. 在进入cocos2dx-js的游戏界面后，点击游戏界面中的返回键，会导致app进程被杀死。</p>
-<p>// 游戏退出时，所调用的js代码<br>PaiJuAppClient.prototype.jsbEnd = function(){<br>if(DeviceUtils.isIOS()){<br>cc.director.stopAnimation();<br>jsb.reflection.callStaticMethod(“TGGameStaticController”,popVC”);<br>} else {<br>cc.director.end(); // android 调用方法<br>}<br>};<br>起初以为是 cc.director.end(); 导致应用被杀死，后改为使用反射调用本地activity 的方法</p>
-<p>jsb.reflection.callStaticMethod(“../GameActivity”, “stopGameControl”,”()V”);<br>但是app还是会被杀死，后经过google搜索，发现是由于点击退出，会调用Cocos2dxHelper中的terminateProces() ，导致进程被杀死，注释掉此行代码即可。<br>然后点击退出就会反射调用本地自己写的方法</p>
-<p>public static void terminateProcess() {<br>// android.os.Process.killProcess(android.os.Process.myPid());<br>}<br><!--more--></p>
-]]></content>
-      
-        <categories>
-            
-            <category> Android </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> Android </tag>
-            
-            <tag> cocos </tag>
             
         </tags>
         
