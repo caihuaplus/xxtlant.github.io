@@ -1,438 +1,96 @@
-<!DOCTYPE html>
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HTTP 协议完全解析 | 王菜花</title><meta name="description" content="HTTP 的全称是 HyperText Transfer Protocol (超文本传输协议)的缩写，是一种建立在 TCP 上的无状态连接。HTTP 是互联网的基础协议，用于客户端与服务器之间的通信，它规定了客户端和服务器之间的通信格式，包括请求与响应的格式。  基本的工作流程是客户端发送一个 HTTP 请求，服务端收到请求开始处理，处理结束返回给客户端结果，客户端对结果进行处理并展示。 现在最流"><meta name="keywords" content="HTTP,Android"><meta name="author" content="王菜花"><meta name="copyright" content="王菜花"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://www.google-analytics.com" crossorigin="crossorigin"/><link rel="dns-prefetch" href="https://www.google-analytics.com"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="dns-prefetch" href="https://fonts.googleapis.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="dns-prefetch" href="//busuanzi.ibruce.info"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="HTTP 协议完全解析"><meta name="twitter:description" content="HTTP 的全称是 HyperText Transfer Protocol (超文本传输协议)的缩写，是一种建立在 TCP 上的无状态连接。HTTP 是互联网的基础协议，用于客户端与服务器之间的通信，它规定了客户端和服务器之间的通信格式，包括请求与响应的格式。  基本的工作流程是客户端发送一个 HTTP 请求，服务端收到请求开始处理，处理结束返回给客户端结果，客户端对结果进行处理并展示。 现在最流"><meta name="twitter:image" content="https://ww1.sinaimg.cn/large/007i4MEmgy1g03x0fvse0j3334223kjn.jpg"><meta property="og:type" content="article"><meta property="og:title" content="HTTP 协议完全解析"><meta property="og:url" content="http://caihuasay.com/2019/02/12/HTTP%20%E5%8D%8F%E8%AE%AE%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90/"><meta property="og:site_name" content="王菜花"><meta property="og:description" content="HTTP 的全称是 HyperText Transfer Protocol (超文本传输协议)的缩写，是一种建立在 TCP 上的无状态连接。HTTP 是互联网的基础协议，用于客户端与服务器之间的通信，它规定了客户端和服务器之间的通信格式，包括请求与响应的格式。  基本的工作流程是客户端发送一个 HTTP 请求，服务端收到请求开始处理，处理结束返回给客户端结果，客户端对结果进行处理并展示。 现在最流"><meta property="og:image" content="https://ww1.sinaimg.cn/large/007i4MEmgy1g03x0fvse0j3334223kjn.jpg"><meta property="article:published_time" content="2019-02-12T12:30:27.000Z"><meta property="article:modified_time" content="2020-05-03T11:53:36.871Z"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
 
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
 
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="http://caihuasay.com/2019/02/12/HTTP%20%E5%8D%8F%E8%AE%AE%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90/"><link rel="next" title="使用 Google Cloud 搭建一年免费 Shadowsocks 教程" href="http://caihuasay.com/2018/02/25/%E4%BD%BF%E7%94%A8%20Google%20Cloud%20%E6%90%AD%E5%BB%BA%E4%B8%80%E5%B9%B4%E5%85%8D%E8%B4%B9%20Shadowsocks%20%E6%95%99%E7%A8%8B/"><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-103062783-1', 'auto');
+ga('send', 'pageview');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"cookieDomain":"https://xxx/","msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
   
-
-
-<html class="theme-next pisces use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
-
-
-
-  
-  
-  
-  
-
-  
-    
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Android,HTTP," />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
-
-
-
-
-
-
-<meta name="description" content="HTTP 的全称是 HyperText Transfer Protocol (超文本传输协议)的缩写，是一种建立在 TCP 上的无状态连接。HTTP 是互联网的基础协议，用于客户端与服务器之间的通信，它规定了客户端和服务器之间的通信格式，包括请求与响应的格式。">
-<meta name="keywords" content="Android,HTTP">
-<meta property="og:type" content="article">
-<meta property="og:title" content="HTTP 协议完全解析">
-<meta property="og:url" content="http://sstlant.com/2019/02/12/HTTP 协议完全解析/index.html">
-<meta property="og:site_name" content="王菜花">
-<meta property="og:description" content="HTTP 的全称是 HyperText Transfer Protocol (超文本传输协议)的缩写，是一种建立在 TCP 上的无状态连接。HTTP 是互联网的基础协议，用于客户端与服务器之间的通信，它规定了客户端和服务器之间的通信格式，包括请求与响应的格式。">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ww1.sinaimg.cn/large/007i4MEmgy1g03x0fvse0j3334223kjn.jpg">
-<meta property="og:image" content="https://ww1.sinaimg.cn/large/007i4MEmgy1fyuos2jbzvj30fb051t90.jpg">
-<meta property="og:image" content="https://ww1.sinaimg.cn/large/007i4MEmgy1fyvp5x2xupj317g0nmdjm.jpg">
-<meta property="og:image" content="https://ww1.sinaimg.cn/large/007i4MEmgy1fyvq039dv9j30gt048gn8.jpg">
-<meta property="og:image" content="https://ww1.sinaimg.cn/large/007i4MEmgy1fyvq1pw7d9j30u009utas.jpg">
-<meta property="og:image" content="https://ww1.sinaimg.cn/large/007i4MEmgy1fz1ph978fpj30nh0anwfy.jpg">
-<meta property="og:updated_time" content="2019-02-12T15:45:58.343Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HTTP 协议完全解析">
-<meta name="twitter:description" content="HTTP 的全称是 HyperText Transfer Protocol (超文本传输协议)的缩写，是一种建立在 TCP 上的无状态连接。HTTP 是互联网的基础协议，用于客户端与服务器之间的通信，它规定了客户端和服务器之间的通信格式，包括请求与响应的格式。">
-<meta name="twitter:image" content="https://ww1.sinaimg.cn/large/007i4MEmgy1g03x0fvse0j3334223kjn.jpg">
-
-
-
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Pisces',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-
-  <link rel="canonical" href="http://sstlant.com/2019/02/12/HTTP 协议完全解析/"/>
-
-
-
-
-
-  <title>HTTP 协议完全解析 | 王菜花</title>
-  
-
-
-
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-103062783-1', 'auto');
-  ga('send', 'pageview');
-</script>
-
-
-  <script type="text/javascript">
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?b3d2b3de67376420e0ce0999630c1b06";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//tajs.qq.com/stats?sId=63488703";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
-
-
-
-
-
-
-
-
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">王菜花</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-      
-        <p class="site-subtitle">Android</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于我
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-links">
-          <a href="/links/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-link"></i> <br />
-            
-            放松和学习
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
-</nav>
-
-
-
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://sstlant.com/2019/02/12/HTTP 协议完全解析/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="xxtlant">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="王菜花">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">HTTP 协议完全解析</h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-12T20:30:27+08:00">
-                2019-02-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/HTTP/" itemprop="url" rel="index">
-                    <span itemprop="name">HTTP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            <!--noindex-->
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/02/12/HTTP 协议完全解析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2019/02/12/HTTP 协议完全解析/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-              <!--/noindex-->
-            
-          
-
-          
-          
-             <span id="/2019/02/12/HTTP 协议完全解析/" class="leancloud_visitors" data-flag-title="HTTP 协议完全解析">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1g03x0fvse0j3334223kjn.jpg" alt="HTTP"></p>
-<p>HTTP 的全称是 HyperText Transfer Protocol (超文本传输协议)的缩写，是一种建立在 TCP 上的无状态连接。HTTP 是互联网的<strong>基础协议</strong>，用于客户端与服务器之间的通信，它规定了客户端和服务器之间的<strong>通信格式</strong>，包括请求与响应的格式。<br> <a id="more"></a></p>
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">5</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">6</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> 娱乐</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于我</span></a></div></div></div></div><i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一、-HTTP-的工作方式"><span class="toc-number">2.</span> <span class="toc-text">一、 HTTP 的工作方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-请求过程"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 请求过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-请求方式"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 请求方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#web-浏览器请求："><span class="toc-number">2.2.1.</span> <span class="toc-text">web 浏览器请求：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#APP-客户端请求："><span class="toc-number">2.2.2.</span> <span class="toc-text">APP 客户端请求：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-报文是什么"><span class="toc-number">2.3.</span> <span class="toc-text">1.3 报文是什么</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、HTTP-的报文格式"><span class="toc-number">3.</span> <span class="toc-text">二、HTTP 的报文格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-请求报文的格式"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 请求报文的格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-响应报文的格式"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 响应报文的格式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、-Method-请求方法"><span class="toc-number">4.</span> <span class="toc-text">三、 Method(请求方法)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GET"><span class="toc-number">4.1.</span> <span class="toc-text">GET</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Post"><span class="toc-number">4.2.</span> <span class="toc-text">Post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PUT"><span class="toc-number">4.3.</span> <span class="toc-text">PUT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DELETE"><span class="toc-number">4.4.</span> <span class="toc-text">DELETE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HEAD"><span class="toc-number">4.5.</span> <span class="toc-text">HEAD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小知识点"><span class="toc-number">4.6.</span> <span class="toc-text">小知识点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、状态码-status-code"><span class="toc-number">5.</span> <span class="toc-text">四、状态码(status code)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1xx：临时性消息。"><span class="toc-number">5.1.</span> <span class="toc-text">1xx：临时性消息。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2xx：成功。"><span class="toc-number">5.2.</span> <span class="toc-text">2xx：成功。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3xx：重定向。"><span class="toc-number">5.3.</span> <span class="toc-text">3xx：重定向。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4xx：客户端错误"><span class="toc-number">5.4.</span> <span class="toc-text">4xx：客户端错误</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5xx：服务器错误"><span class="toc-number">5.5.</span> <span class="toc-text">5xx：服务器错误</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五、首部-Headers"><span class="toc-number">6.</span> <span class="toc-text">五、首部(Headers)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-通用首部"><span class="toc-number">6.1.</span> <span class="toc-text">5.1 通用首部</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Date"><span class="toc-number">6.1.1.</span> <span class="toc-text">Date</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Connection"><span class="toc-number">6.1.2.</span> <span class="toc-text">Connection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#其他通用首部"><span class="toc-number">6.1.3.</span> <span class="toc-text">其他通用首部</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-请求首部"><span class="toc-number">6.2.</span> <span class="toc-text">5.2 请求首部</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Host"><span class="toc-number">6.2.1.</span> <span class="toc-text">Host</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Accept"><span class="toc-number">6.2.2.</span> <span class="toc-text">Accept</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Accept-Charset"><span class="toc-number">6.2.3.</span> <span class="toc-text">Accept-Charset</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Accept-Encoding"><span class="toc-number">6.2.4.</span> <span class="toc-text">Accept-Encoding</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Accept-Language"><span class="toc-number">6.2.5.</span> <span class="toc-text">Accept-Language</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Range"><span class="toc-number">6.2.6.</span> <span class="toc-text">Range</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#From"><span class="toc-number">6.2.7.</span> <span class="toc-text">From</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-响应首部"><span class="toc-number">6.3.</span> <span class="toc-text">5.3 响应首部</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Server"><span class="toc-number">6.3.1.</span> <span class="toc-text">Server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Set-Cookie"><span class="toc-number">6.3.2.</span> <span class="toc-text">Set-Cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Accept-Ranges"><span class="toc-number">6.3.3.</span> <span class="toc-text">Accept-Ranges</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-Body-首部"><span class="toc-number">6.4.</span> <span class="toc-text">5.4 Body 首部</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Location"><span class="toc-number">6.4.1.</span> <span class="toc-text">Location</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Type"><span class="toc-number">6.4.2.</span> <span class="toc-text">Content-Type</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-length"><span class="toc-number">6.4.3.</span> <span class="toc-text">Content-length</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Content-Encoding"><span class="toc-number">6.4.4.</span> <span class="toc-text">Content-Encoding</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#六、参考链接"><span class="toc-number">7.</span> <span class="toc-text">六、参考链接</span></a></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://ww1.sinaimg.cn/large/007i4MEmgy1g03x0fvse0j3334223kjn.jpg)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">王菜花</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> 娱乐</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于我</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">HTTP 协议完全解析</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="发表于 2019-02-12 20:30:27"><i class="fa fa-calendar" aria-hidden="true"></i> 发表于 2019-02-12</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新于 2020-05-03 19:53:36"><i class="fa fa-history" aria-hidden="true"></i> 更新于 2020-05-03</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/HTTP/">HTTP</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="fa fa-eye post-meta__icon" aria-hidden="true"> </i><span>阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p>HTTP 的全称是 HyperText Transfer Protocol (超文本传输协议)的缩写，是一种建立在 TCP 上的无状态连接。HTTP 是互联网的<strong>基础协议</strong>，用于客户端与服务器之间的通信，它规定了客户端和服务器之间的<strong>通信格式</strong>，包括请求与响应的格式。<br> <a id="more"></a></p>
 <p>基本的工作流程是客户端发送一个 HTTP 请求，服务端收到请求开始处理，处理结束返回给客户端结果，客户端对结果进行处理并展示。</p>
 <p>现在最流行的 HTTP 版本还是 1997 年发布的 HTTP/1.1。<br><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1fyuos2jbzvj30fb051t90.jpg" alt=""></p>
 <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
@@ -443,7 +101,8 @@
 <li>HTTP 响应码</li>
 <li>HTTP Headers<h2 id="一、-HTTP-的工作方式"><a href="#一、-HTTP-的工作方式" class="headerlink" title="一、 HTTP 的工作方式"></a>一、 HTTP 的工作方式</h2><h3 id="1-1-请求过程"><a href="#1-1-请求过程" class="headerlink" title="1.1 请求过程"></a>1.1 请求过程</h3>客户端向服务端发送一段请求报文，服务端收到后，返回响应报文，客户端对响应内容进行展示。</li>
 </ul>
-<p><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1fyvp5x2xupj317g0nmdjm.jpg" width="80%/"></p>
+<img src = "https://ww1.sinaimg.cn/large/007i4MEmgy1fyvp5x2xupj317g0nmdjm.jpg" width = 80%/>
+
 <p>一个 HTTP 的请求必定是<strong>由客户端发起，服务器端回复响应</strong>。服务器在没有接收到请求之前不会发送响应。</p>
 <blockquote>
 <p>名词解释</p>
@@ -451,7 +110,8 @@
 <p>服务端：提供资源响应的一端。</p>
 <p>资源：网络上的一切内容都是资源，无论是图片文字还是动态代码。</p>
 </blockquote>
-<h3 id="1-2-请求方式"><a href="#1-2-请求方式" class="headerlink" title="1.2 请求方式"></a>1.2 请求方式</h3><h4 id="web-浏览器请求："><a href="#web-浏览器请求：" class="headerlink" title="web 浏览器请求："></a>web 浏览器请求：</h4><p><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1fyvq039dv9j30gt048gn8.jpg" width="20%" height="20%"></p>
+<h3 id="1-2-请求方式"><a href="#1-2-请求方式" class="headerlink" title="1.2 请求方式"></a>1.2 请求方式</h3><h4 id="web-浏览器请求："><a href="#web-浏览器请求：" class="headerlink" title="web 浏览器请求："></a>web 浏览器请求：</h4><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1fyvq039dv9j30gt048gn8.jpg" width = 20% height = 20% />
+
 <p>请求过程如下 ⬇️</p>
 <ol>
 <li>用户输入地址后回车或点击链接</li>
@@ -459,7 +119,8 @@
 <li>服务器处理请求后，发送响应报文给浏览器 </li>
 <li>浏览器解析响应报文并使用渲染引擎显示到界面</li>
 </ol>
-<h4 id="APP-客户端请求："><a href="#APP-客户端请求：" class="headerlink" title="APP 客户端请求："></a>APP 客户端请求：</h4><p><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1fyvq1pw7d9j30u009utas.jpg" width="40%" height="40%"></p>
+<h4 id="APP-客户端请求："><a href="#APP-客户端请求：" class="headerlink" title="APP 客户端请求："></a>APP 客户端请求：</h4><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1fyvq1pw7d9j30u009utas.jpg" width = 40% height = 40% />
+
 <p>请求过程如下 ⬇️</p>
 <ol>
 <li>用户点击或界面自动触发联网需求</li>
@@ -471,9 +132,11 @@
 <p>每条报文都包含<strong>一条来自于客户端的请求，或者一条来自于服务端的响应</strong>。</p>
 <p>它由 3 部分组成：对报文进行描述的「<strong>起始行</strong>」、包含属性的「<strong>首部(Header)</strong>」以及可选的、包含数据的「<strong>主体(body)</strong>」</p>
 <p><img src="https://ww1.sinaimg.cn/large/007i4MEmgy1fz1ph978fpj30nh0anwfy.jpg" alt=""></p>
-<h2 id="二、HTTP-的报文格式"><a href="#二、HTTP-的报文格式" class="headerlink" title="二、HTTP 的报文格式"></a>二、HTTP 的报文格式</h2><h3 id="2-1-请求报文的格式"><a href="#2-1-请求报文的格式" class="headerlink" title="2.1 请求报文的格式"></a>2.1 请求报文的格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;method&gt; &lt;path&gt; &lt;HTTP version&gt;</div><div class="line">&lt;headers&gt;</div><div class="line"></div><div class="line">&lt;entity-body&gt;</div></pre></td></tr></table></figure>
+<h2 id="二、HTTP-的报文格式"><a href="#二、HTTP-的报文格式" class="headerlink" title="二、HTTP 的报文格式"></a>二、HTTP 的报文格式</h2><h3 id="2-1-请求报文的格式"><a href="#2-1-请求报文的格式" class="headerlink" title="2.1 请求报文的格式"></a>2.1 请求报文的格式</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;method&gt; &lt;path&gt; &lt;HTTP version&gt;</span><br><span class="line">&lt;headers&gt;</span><br><span class="line"></span><br><span class="line">&lt;entity-body&gt;</span><br></pre></td></tr></table></figure>
+
 <h3 id="2-2-响应报文的格式"><a href="#2-2-响应报文的格式" class="headerlink" title="2.2 响应报文的格式"></a>2.2 响应报文的格式</h3><p>(注意，<strong>只有起始行的语法与请求报文有所不同</strong>)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;HTTP version&gt; &lt;status code&gt; &lt;reason-phrase&gt;</div><div class="line">&lt;headers&gt;</div><div class="line"></div><div class="line">&lt;entity-body&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;HTTP version&gt; &lt;status code&gt; &lt;reason-phrase&gt;</span><br><span class="line">&lt;headers&gt;</span><br><span class="line"></span><br><span class="line">&lt;entity-body&gt;</span><br></pre></td></tr></table></figure>
+
 <p>下面是对各部分的简要描述，后面会详细介绍。</p>
 <ul>
 <li>方法 (method)<br>客户端希望服务器对资源执行的动作，常见的方法有 Get、Post、HEAD 等。</li>
@@ -490,30 +153,31 @@
 <li>只获取资源，不对服务器数据进行修改</li>
 <li>不发送 body</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GET  /users/1  HTTP/1.1</div><div class="line">Host: api.github.com</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET  &#x2F;users&#x2F;1  HTTP&#x2F;1.1</span><br><span class="line">Host: api.github.com</span><br></pre></td></tr></table></figure>
 <p>对应的 Retrofit 的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">@GET(&quot;/users/&#123;id&#125;&quot;)</div><div class="line">Call&lt;User&gt; getUser(@Path(&quot;id&quot;) String id, @Query(&quot;gender&quot;) String gender);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@GET(&quot;&#x2F;users&#x2F;&#123;id&#125;&quot;)</span><br><span class="line">Call&lt;User&gt; getUser(@Path(&quot;id&quot;) String id, @Query(&quot;gender&quot;) String gender);</span><br></pre></td></tr></table></figure>
 <h3 id="Post"><a href="#Post" class="headerlink" title="Post"></a>Post</h3><ul>
 <li>用户增加或者修改资源</li>
 <li>包含 body，发送给服务器的内容写在 body 里面</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">POST  /users  HTTP/1.1</div><div class="line">Host: api.github.com</div><div class="line">Content-Type: application/x-www-form-urlencoded</div><div class="line">Content-Length: 13</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST  &#x2F;users  HTTP&#x2F;1.1</span><br><span class="line">Host: api.github.com</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 13</span><br></pre></td></tr></table></figure>
 <p>对应的 Retrofit 的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@FormUrlEncoded</div><div class="line">@POST(&quot;/users&quot;)</div><div class="line">Call&lt;User&gt; addUser(@Field(&quot;name&quot;) String name, @Field(&quot;gender&quot;) String</div><div class="line">gender);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@FormUrlEncoded</span><br><span class="line">@POST(&quot;&#x2F;users&quot;)</span><br><span class="line">Call&lt;User&gt; addUser(@Field(&quot;name&quot;) String name, @Field(&quot;gender&quot;) String</span><br><span class="line">gender);</span><br></pre></td></tr></table></figure>
 <h3 id="PUT"><a href="#PUT" class="headerlink" title="PUT"></a>PUT</h3><ul>
 <li>用于修改资源</li>
 <li>包含 body，发送给服务器的内容写在 body 里面</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">PUT  /users/1  HTTP/1.1</div><div class="line">Host: api.github.com</div><div class="line">Content-Type: application/x-www-form-urlencoded</div><div class="line">Content-Length: 13</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PUT  &#x2F;users&#x2F;1  HTTP&#x2F;1.1</span><br><span class="line">Host: api.github.com</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 13</span><br></pre></td></tr></table></figure>
 <p>对应的 Retrofit 的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@FormUrlEncoded</div><div class="line">@PUT(&quot;/users/&#123;id&#125;&quot;)</div><div class="line">Call&lt;User&gt; updateGender(@Path(&quot;id&quot;) String id, @Field(&quot;gender&quot;) String</div><div class="line">gender);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@FormUrlEncoded</span><br><span class="line">@PUT(&quot;&#x2F;users&#x2F;&#123;id&#125;&quot;)</span><br><span class="line">Call&lt;User&gt; updateGender(@Path(&quot;id&quot;) String id, @Field(&quot;gender&quot;) String</span><br><span class="line">gender);</span><br></pre></td></tr></table></figure>
+
 <h3 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h3><ul>
 <li>用于删除资源</li>
 <li>不发送 body</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">DELETE  /users/1  HTTP/1.1</div><div class="line">Host: api.github.com</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">DELETE  &#x2F;users&#x2F;1  HTTP&#x2F;1.1</span><br><span class="line">Host: api.github.com</span><br></pre></td></tr></table></figure>
 <p>对应的 Retrofit 的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">@DELETE(&quot;/users/&#123;id&#125;&quot;)</div><div class="line">Call&lt;User&gt; getUser(@Path(&quot;id&quot;) String id, @Query(&quot;gender&quot;) String gender);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@DELETE(&quot;&#x2F;users&#x2F;&#123;id&#125;&quot;)</span><br><span class="line">Call&lt;User&gt; getUser(@Path(&quot;id&quot;) String id, @Query(&quot;gender&quot;) String gender);</span><br></pre></td></tr></table></figure>
 <h3 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h3><ul>
 <li><code>HEAD</code> 与 <code>GET</code> 的使用方式完全相同。</li>
 <li>区别在于，<code>HEAD</code> 请求的返回响应中没有 <code>Body</code></li>
@@ -521,11 +185,12 @@
 </ul>
 <h3 id="小知识点"><a href="#小知识点" class="headerlink" title="小知识点"></a>小知识点</h3><p><code>GET</code>、<code>PUT</code>、<code>DELETE</code> 都是<strong>幂等</strong>操作，就是说，请求一次和请求多次的结果是一样的。<br>比如，GET 请求一个数据，请求一次和请求十次返回的结果是一样的，PUT 同样修改一个数据，修改一次和修改十次，结果也都是一样的。</p>
 <h2 id="四、状态码-status-code"><a href="#四、状态码-status-code" class="headerlink" title="四、状态码(status code)"></a>四、状态码(status code)</h2><p>状态码是对结果进行类型化的描述的，比如「请求成功」、「内容未找到」等<br>主要分为 5 类。</p>
-<h3 id="1xx：临时性消息。"><a href="#1xx：临时性消息。" class="headerlink" title="1xx：临时性消息。"></a>1xx：临时性消息。</h3>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">100：继续发送</div><div class="line">101：正在切换协议</div></pre></td></tr></table></figure>
-<h3 id="2xx：成功。"><a href="#2xx：成功。" class="headerlink" title="2xx：成功。"></a>2xx：成功。</h3>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">200：OK (最常见) </div><div class="line">201：创建成功</div></pre></td></tr></table></figure>
-<h3 id="3xx：重定向。"><a href="#3xx：重定向。" class="headerlink" title="3xx：重定向。"></a>3xx：重定向。</h3>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">301：域名永久移动</div><div class="line">302：暂时移动</div><div class="line">304：内容未改变，请求被重定向到客户端本地缓存</div></pre></td></tr></table></figure>
-<h3 id="4xx：客户端错误"><a href="#4xx：客户端错误" class="headerlink" title="4xx：客户端错误"></a>4xx：客户端错误</h3>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">400：客户端请求错误，服务器不理解请求的语法。</div><div class="line">401：未授权，要求进行身份验证。</div><div class="line">403：被禁止，服务器拒绝请求。</div><div class="line">404：找不到内容，服务器找不到请求的网页。(最常见)</div></pre></td></tr></table></figure>
-<h3 id="5xx：服务器错误"><a href="#5xx：服务器错误" class="headerlink" title="5xx：服务器错误"></a>5xx：服务器错误</h3>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">500：服务器内部错误 (最常见)</div><div class="line">503：服务不可用</div></pre></td></tr></table></figure>
+<h3 id="1xx：临时性消息。"><a href="#1xx：临时性消息。" class="headerlink" title="1xx：临时性消息。"></a>1xx：临时性消息。</h3>  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">100：继续发送</span><br><span class="line">101：正在切换协议</span><br></pre></td></tr></table></figure>
+<h3 id="2xx：成功。"><a href="#2xx：成功。" class="headerlink" title="2xx：成功。"></a>2xx：成功。</h3>  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">200：OK (最常见) </span><br><span class="line">201：创建成功</span><br></pre></td></tr></table></figure>
+<h3 id="3xx：重定向。"><a href="#3xx：重定向。" class="headerlink" title="3xx：重定向。"></a>3xx：重定向。</h3>  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">301：域名永久移动</span><br><span class="line">302：暂时移动</span><br><span class="line">304：内容未改变，请求被重定向到客户端本地缓存</span><br></pre></td></tr></table></figure>
+<h3 id="4xx：客户端错误"><a href="#4xx：客户端错误" class="headerlink" title="4xx：客户端错误"></a>4xx：客户端错误</h3>  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">400：客户端请求错误，服务器不理解请求的语法。</span><br><span class="line">401：未授权，要求进行身份验证。</span><br><span class="line">403：被禁止，服务器拒绝请求。</span><br><span class="line">404：找不到内容，服务器找不到请求的网页。(最常见)</span><br></pre></td></tr></table></figure>
+<h3 id="5xx：服务器错误"><a href="#5xx：服务器错误" class="headerlink" title="5xx：服务器错误"></a>5xx：服务器错误</h3>  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">500：服务器内部错误 (最常见)</span><br><span class="line">503：服务不可用</span><br></pre></td></tr></table></figure>
+
 <h2 id="五、首部-Headers"><a href="#五、首部-Headers" class="headerlink" title="五、首部(Headers)"></a>五、首部(Headers)</h2><p>首部包含多个请求头，是用来描述消息的元数据(meta data)。</p>
 <p>首部字段有很多，主要分为以下几类：</p>
 <ul>
@@ -535,43 +200,58 @@
 <li>body 首部 =&gt; 描述 body 的首部</li>
 </ul>
 <p>下面我们就说一些比较常用的。</p>
-<h3 id="5-1-通用首部"><a href="#5-1-通用首部" class="headerlink" title="5.1 通用首部"></a>5.1 通用首部</h3><h4 id="Date"><a href="#Date" class="headerlink" title="Date"></a>Date</h4><p>提供日期和时间标志，说明报文是在什么时间创建的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Date: Tue, 12 Feb 2019 07:32:07 GMT</div></pre></td></tr></table></figure></p>
-<h4 id="Connection"><a href="#Connection" class="headerlink" title="Connection"></a>Connection</h4><p>允许客户端和服务器指定与请求/响应连接有关的选项。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Connection: keep-alive</div></pre></td></tr></table></figure></p>
-<h4 id="其他通用首部"><a href="#其他通用首部" class="headerlink" title="其他通用首部"></a>其他通用首部</h4><p><strong>Via</strong> : 显示报文经过的中间节点（代理、网关）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">via: cache25.l2ot7-1[0,304-0,H], cache25.l2ot7-1[1,0], cache5.us14[342,200-0,H]</div></pre></td></tr></table></figure></p>
-<p><strong>Transfer-Encoding</strong> : 告知接收端为了保证报文的可靠传输，对报文采用了什么编码方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Transfer-Encoding: chunked</div></pre></td></tr></table></figure></p>
-<p><strong>Cache-Control</strong> : 指定缓存的控制方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cache-control: no-store, no-cache, must-revalidate, proxy-revalidate</div></pre></td></tr></table></figure></p>
-<h3 id="5-2-请求首部"><a href="#5-2-请求首部" class="headerlink" title="5.2 请求首部"></a>5.2 请求首部</h3><h4 id="Host"><a href="#Host" class="headerlink" title="Host"></a>Host</h4><p>给出了接收请求的服务器的主机名和端口。(注意:不是在网络上用于寻址的，⽽是在目标服务器上定位子服务器。)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Host: api.github.com</div></pre></td></tr></table></figure></p>
+<h3 id="5-1-通用首部"><a href="#5-1-通用首部" class="headerlink" title="5.1 通用首部"></a>5.1 通用首部</h3><h4 id="Date"><a href="#Date" class="headerlink" title="Date"></a>Date</h4><p>提供日期和时间标志，说明报文是在什么时间创建的。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Date: Tue, 12 Feb 2019 07:32:07 GMT</span><br></pre></td></tr></table></figure>
+<h4 id="Connection"><a href="#Connection" class="headerlink" title="Connection"></a>Connection</h4><p>允许客户端和服务器指定与请求/响应连接有关的选项。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Connection: keep-alive</span><br></pre></td></tr></table></figure>
+<h4 id="其他通用首部"><a href="#其他通用首部" class="headerlink" title="其他通用首部"></a>其他通用首部</h4><p><strong>Via</strong> : 显示报文经过的中间节点（代理、网关）。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">via: cache25.l2ot7-1[0,304-0,H], cache25.l2ot7-1[1,0], cache5.us14[342,200-0,H]</span><br></pre></td></tr></table></figure>
+<p><strong>Transfer-Encoding</strong> : 告知接收端为了保证报文的可靠传输，对报文采用了什么编码方式。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Transfer-Encoding: chunked</span><br></pre></td></tr></table></figure>
+<p><strong>Cache-Control</strong> : 指定缓存的控制方式。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cache-control: no-store, no-cache, must-revalidate, proxy-revalidate</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-请求首部"><a href="#5-2-请求首部" class="headerlink" title="5.2 请求首部"></a>5.2 请求首部</h3><h4 id="Host"><a href="#Host" class="headerlink" title="Host"></a>Host</h4><p>给出了接收请求的服务器的主机名和端口。(注意:不是在网络上用于寻址的，⽽是在目标服务器上定位子服务器。)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Host: api.github.com</span><br></pre></td></tr></table></figure>
 <h4 id="Accept"><a href="#Accept" class="headerlink" title="Accept"></a>Accept</h4><p>用来告诉<strong>服务端</strong>客户端会接受的媒体类型，包括客户端需要什么，可以使用什么，以及不想要什么。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</div><div class="line"></div><div class="line">&apos;*&apos; 用来表示通配符。</div><div class="line">;q= (q-factor weighting)</div><div class="line">值代表优先顺序，用相对质量价值表示，又称为权重。</div></pre></td></tr></table></figure>
-<h4 id="Accept-Charset"><a href="#Accept-Charset" class="headerlink" title="Accept-Charset"></a>Accept-Charset</h4><p>用来告知服务器，客户端可以处理的字符集类型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Accept-Charset: utf-8, iso-8859-1;q=0.5</div></pre></td></tr></table></figure></p>
-<h4 id="Accept-Encoding"><a href="#Accept-Encoding" class="headerlink" title="Accept-Encoding"></a>Accept-Encoding</h4><p>用来将客户端能够理解的内容编码方式告知服务器，服务端会选择一个客户端提议的方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Accept-Encoding: gzip, deflate, br</div><div class="line"></div><div class="line">gzip：表示采用 Lempel-Ziv coding (LZ77) 压缩算法，以及32位CRC校验的编码方式。</div><div class="line">compress：采用 Lempel-Ziv-Welch (LZW) 压缩算法。</div><div class="line">deflate：采用 zlib 结构和 deflate 压缩算法。</div><div class="line">br：表示采用 Brotli 算法的编码方式。</div><div class="line">identity：用于指代自身（例如：未经过压缩和修改）。除非特别指明，这个标记始终可以被接受。</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,image&#x2F;apng,*&#x2F;*;q&#x3D;0.8</span><br><span class="line"></span><br><span class="line">&#39;*&#39; 用来表示通配符。</span><br><span class="line">;q&#x3D; (q-factor weighting)</span><br><span class="line">值代表优先顺序，用相对质量价值表示，又称为权重。</span><br></pre></td></tr></table></figure>
+<h4 id="Accept-Charset"><a href="#Accept-Charset" class="headerlink" title="Accept-Charset"></a>Accept-Charset</h4><p>用来告知服务器，客户端可以处理的字符集类型。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Accept-Charset: utf-8, iso-8859-1;q&#x3D;0.5</span><br></pre></td></tr></table></figure>
+<h4 id="Accept-Encoding"><a href="#Accept-Encoding" class="headerlink" title="Accept-Encoding"></a>Accept-Encoding</h4><p>用来将客户端能够理解的内容编码方式告知服务器，服务端会选择一个客户端提议的方式。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line"></span><br><span class="line">gzip：表示采用 Lempel-Ziv coding (LZ77) 压缩算法，以及32位CRC校验的编码方式。</span><br><span class="line">compress：采用 Lempel-Ziv-Welch (LZW) 压缩算法。</span><br><span class="line">deflate：采用 zlib 结构和 deflate 压缩算法。</span><br><span class="line">br：表示采用 Brotli 算法的编码方式。</span><br><span class="line">identity：用于指代自身（例如：未经过压缩和修改）。除非特别指明，这个标记始终可以被接受。</span><br></pre></td></tr></table></figure>
 <h4 id="Accept-Language"><a href="#Accept-Language" class="headerlink" title="Accept-Language"></a>Accept-Language</h4><p>用来告诉服务器，客户端能够理解<strong>哪些语言</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Accept-Language: zh-CN,zh;q=0.9,en;q=0.8</div></pre></td></tr></table></figure>
-<h4 id="Range"><a href="#Range" class="headerlink" title="Range"></a>Range</h4><p>告诉服务器，客户端要获取哪段数据。<br>主要用于：<strong>断点续传</strong>、<strong>多线程下载</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">语法：</div><div class="line">Range: &lt;unit&gt;=&lt;range-start&gt;-&lt;range-end&gt;, &lt;range-start&gt;-&lt;range-end&gt;, &lt;range-start&gt;-&lt;range-end&gt;</div><div class="line">&lt;unit&gt;：范围所采用的单位，通常是字节（bytes）。</div><div class="line">&lt;range-start&gt;：一个整数，表示在特定单位下，范围的起始值。</div><div class="line">&lt;range-end&gt;：一个整数，表示在特定单位下，范围的结束值。这个值是可选的，如果不存在，表示此范围一直延伸到文档结束。</div><div class="line"></div><div class="line">Range: bytes=200-1000, 2000-6576, 19000-</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.9,en;q&#x3D;0.8</span><br></pre></td></tr></table></figure>
+<h4 id="Range"><a href="#Range" class="headerlink" title="Range"></a>Range</h4><p>告诉服务器，客户端要获取哪段数据。<br>主要用于：<strong>断点续传</strong>、<strong>多线程下载</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">语法：</span><br><span class="line">Range: &lt;unit&gt;&#x3D;&lt;range-start&gt;-&lt;range-end&gt;, &lt;range-start&gt;-&lt;range-end&gt;, &lt;range-start&gt;-&lt;range-end&gt;</span><br><span class="line">&lt;unit&gt;：范围所采用的单位，通常是字节（bytes）。</span><br><span class="line">&lt;range-start&gt;：一个整数，表示在特定单位下，范围的起始值。</span><br><span class="line">&lt;range-end&gt;：一个整数，表示在特定单位下，范围的结束值。这个值是可选的，如果不存在，表示此范围一直延伸到文档结束。</span><br><span class="line"></span><br><span class="line">Range: bytes&#x3D;200-1000, 2000-6576, 19000-</span><br></pre></td></tr></table></figure>
 <h4 id="From"><a href="#From" class="headerlink" title="From"></a>From</h4><p>提供了客户端用户的 E-mail 地址，<br>用处：比如你有一个爬虫程序，那么 Form 首部应该随请求一起发送，这样的话，在服务器遇到问题的时候，例如爬虫发送了过量的、不希望收到的或者不合法的请求时，站点管理员可以联系到你。</p>
-<h3 id="5-3-响应首部"><a href="#5-3-响应首部" class="headerlink" title="5.3 响应首部"></a>5.3 响应首部</h3><h4 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h4><p>包含了处理请求的源头服务器所用到的软件相关信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Server: Apache-Coyote/1.1</div></pre></td></tr></table></figure></p>
+<h3 id="5-3-响应首部"><a href="#5-3-响应首部" class="headerlink" title="5.3 响应首部"></a>5.3 响应首部</h3><h4 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h4><p>包含了处理请求的源头服务器所用到的软件相关信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Server: Apache-Coyote&#x2F;1.1</span><br></pre></td></tr></table></figure>
 <h4 id="Set-Cookie"><a href="#Set-Cookie" class="headerlink" title="Set-Cookie"></a>Set-Cookie</h4><p>用来由服务器端向客户端发送 cookie。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">会话期 cookies 将会在客户端关闭时被移除。 </div><div class="line">会话期 cookie 不设置 Expires 或 Max-Age 指令</div><div class="line">Set-Cookie: sessionid=38afes7a8; HttpOnly; Path=/</div><div class="line"></div><div class="line">持久化 Cookie 不会在客户端关闭时失效，而是在特定的日期（Expires）或者经过一段特定的时间之后（Max-Age）才会失效。</div><div class="line"></div><div class="line">Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">会话期 cookies 将会在客户端关闭时被移除。 </span><br><span class="line">会话期 cookie 不设置 Expires 或 Max-Age 指令</span><br><span class="line">Set-Cookie: sessionid&#x3D;38afes7a8; HttpOnly; Path&#x3D;&#x2F;</span><br><span class="line"></span><br><span class="line">持久化 Cookie 不会在客户端关闭时失效，而是在特定的日期（Expires）或者经过一段特定的时间之后（Max-Age）才会失效。</span><br><span class="line"></span><br><span class="line">Set-Cookie: id&#x3D;a3fWa; Expires&#x3D;Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly</span><br></pre></td></tr></table></figure>
 <h4 id="Accept-Ranges"><a href="#Accept-Ranges" class="headerlink" title="Accept-Ranges"></a>Accept-Ranges</h4><p>响应中出现，表示服务器支持按字节来取范围数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">语法：</div><div class="line">Accept-Ranges: bytes</div><div class="line">Accept-Ranges: none</div><div class="line">none：不支持任何范围请求单位，由于其等同于没有返回此头部，因此很少使用。</div><div class="line">bytes：范围请求的单位是 bytes （字节）。</div><div class="line"></div><div class="line">Accept-Ranges: bytes</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">语法：</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line">Accept-Ranges: none</span><br><span class="line">none：不支持任何范围请求单位，由于其等同于没有返回此头部，因此很少使用。</span><br><span class="line">bytes：范围请求的单位是 bytes （字节）。</span><br><span class="line"></span><br><span class="line">Accept-Ranges: bytes</span><br></pre></td></tr></table></figure>
+
 <h3 id="5-4-Body-首部"><a href="#5-4-Body-首部" class="headerlink" title="5.4 Body 首部"></a>5.4 Body 首部</h3><p>由于请求与响应中都可以包含 body部分，所以在请求报文与响应报文中都可以出现这部分字段。</p>
-<h4 id="Location"><a href="#Location" class="headerlink" title="Location"></a>Location</h4><p>指定的是需要将页面重新定向至的地址。一般在响应码为 3xx 的响应中才会有意义。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Location: /index.html</div></pre></td></tr></table></figure></p>
+<h4 id="Location"><a href="#Location" class="headerlink" title="Location"></a>Location</h4><p>指定的是需要将页面重新定向至的地址。一般在响应码为 3xx 的响应中才会有意义。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Location: &#x2F;index.html</span><br></pre></td></tr></table></figure>
 <h4 id="Content-Type"><a href="#Content-Type" class="headerlink" title="Content-Type"></a>Content-Type</h4><p>告诉客户端实际返回的内容的内容类型。<br><strong>主要分为一下 4 类:</strong></p>
 <ul>
 <li>text/html </li>
 </ul>
 <p>请求 Web ⻚面时返回响应的类型，Body 中返回 html 文本。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 200 OK</div><div class="line">Content-Type: text/html; charset=utf-8</div><div class="line">Content-Length: 853</div><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;utf-8&quot;&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">Content-Type: text&#x2F;html; charset&#x3D;utf-8</span><br><span class="line">Content-Length: 853</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset&#x3D;&quot;utf-8&quot;&gt;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>x-www-form-urlencoded</li>
 </ul>
 <p>Web ⻚面纯⽂本表单的提交方式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">POST  /users  HTTP/1.1</div><div class="line">Host: api.github.com</div><div class="line">Content-Type: application/x-www-form-urlencoded</div><div class="line">Content-Length: 27</div><div class="line">name=xxtlant&amp;gender=male</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST  &#x2F;users  HTTP&#x2F;1.1</span><br><span class="line">Host: api.github.com</span><br><span class="line">Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">Content-Length: 27</span><br><span class="line">name&#x3D;xxtlant&amp;gender&#x3D;male</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>multitype/form-data</li>
 </ul>
 <p>Web ⻚面含有⼆制⽂件时的提交方式。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">POST  /users  HTTP/1.1</div><div class="line">Host: hencoder.com</div><div class="line">Content-Type: multipart/form-data; boundary=----</div><div class="line">WebKitFormBoundary7MA4YWxkTrZu0gW</div><div class="line">Content-Length: 2382</div><div class="line">------WebKitFormBoundary7MA4YWxkTrZu0gW</div><div class="line">Content-Disposition: form-data; name=&quot;name&quot;</div><div class="line">rengwuxian</div><div class="line">------WebKitFormBoundary7MA4YWxkTrZu0gW</div><div class="line">Content-Disposition: form-data; name=&quot;avatar&quot;; filename=&quot;avatar.jpg&quot;</div><div class="line">Content-Type: image/jpeg</div><div class="line">JFIFHHvOwX9jximQrWa......</div><div class="line">------WebKitFormBoundary7MA4YWxkTrZu0gW--</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST  &#x2F;users  HTTP&#x2F;1.1</span><br><span class="line">Host: hencoder.com</span><br><span class="line">Content-Type: multipart&#x2F;form-data; boundary&#x3D;----</span><br><span class="line">WebKitFormBoundary7MA4YWxkTrZu0gW</span><br><span class="line">Content-Length: 2382</span><br><span class="line">------WebKitFormBoundary7MA4YWxkTrZu0gW</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;name&quot;</span><br><span class="line">rengwuxian</span><br><span class="line">------WebKitFormBoundary7MA4YWxkTrZu0gW</span><br><span class="line">Content-Disposition: form-data; name&#x3D;&quot;avatar&quot;; filename&#x3D;&quot;avatar.jpg&quot;</span><br><span class="line">Content-Type: image&#x2F;jpeg</span><br><span class="line">JFIFHHvOwX9jximQrWa......</span><br><span class="line">------WebKitFormBoundary7MA4YWxkTrZu0gW--</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>application/json , image/jpeg , application/zip …</li>
 </ul>
@@ -579,589 +259,32 @@
 <blockquote>
 <p>请求中提交 JSON</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">POST /users HTTP/1.1</div><div class="line">Host: api.github.com</div><div class="line">Content-Type: application/json; charset=utf-8</div><div class="line">Content-Length: 38</div><div class="line">&#123;&quot;name&quot;:&quot;xxtlant&quot;,&quot;gender&quot;:&quot;male&quot;&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;users HTTP&#x2F;1.1</span><br><span class="line">Host: api.github.com</span><br><span class="line">Content-Type: application&#x2F;json; charset&#x3D;utf-8</span><br><span class="line">Content-Length: 38</span><br><span class="line">&#123;&quot;name&quot;:&quot;xxtlant&quot;,&quot;gender&quot;:&quot;male&quot;&#125;</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>响应中返回 JSON </p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Date: Tue, 12 Feb 2019 08:04:14 GMT</div><div class="line">Content-Type: application/json; charset=utf-8</div><div class="line">Transfer-Encoding: chunked</div><div class="line">Server: GitHub.com</div><div class="line">Status: 200 OK</div><div class="line"></div><div class="line">&#123;&quot;login&quot;: &quot;xxtlant&quot;,</div><div class="line">&quot;id&quot;: 18342980,</div><div class="line">&quot;node_id&quot;: &quot;MDQ6VXNlcjE4MzQyOTgw&quot;,</div><div class="line">&quot;avatar_url&quot;: &quot;https://avatars2.githubusercontent.com/u/18342980?v=4&quot;,</div><div class="line">&quot;gravatar_id&quot;: &quot;&quot;,</div><div class="line">....</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Date: Tue, 12 Feb 2019 08:04:14 GMT</span><br><span class="line">Content-Type: application&#x2F;json; charset&#x3D;utf-8</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line">Server: GitHub.com</span><br><span class="line">Status: 200 OK</span><br><span class="line"></span><br><span class="line">&#123;&quot;login&quot;: &quot;xxtlant&quot;,</span><br><span class="line">&quot;id&quot;: 18342980,</span><br><span class="line">&quot;node_id&quot;: &quot;MDQ6VXNlcjE4MzQyOTgw&quot;,</span><br><span class="line">&quot;avatar_url&quot;: &quot;https:&#x2F;&#x2F;avatars2.githubusercontent.com&#x2F;u&#x2F;18342980?v&#x3D;4&quot;,</span><br><span class="line">&quot;gravatar_id&quot;: &quot;&quot;,</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>请求中提交⼆进制内容</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">POST /user/1/avatar HTTP/1.1</div><div class="line">Host: hencoder.com</div><div class="line">Content-Type: image/jpeg</div><div class="line">Content-Length: 1575</div><div class="line">JFIFHH9......</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST &#x2F;user&#x2F;1&#x2F;avatar HTTP&#x2F;1.1</span><br><span class="line">Host: hencoder.com</span><br><span class="line">Content-Type: image&#x2F;jpeg</span><br><span class="line">Content-Length: 1575</span><br><span class="line">JFIFHH9......</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>相应中返回⼆进制内容</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 200 OK</div><div class="line">content-type: image/jpeg</div><div class="line">content-length: 1575</div><div class="line">JFIFHH9......</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HTTP&#x2F;1.1 200 OK</span><br><span class="line">content-type: image&#x2F;jpeg</span><br><span class="line">content-length: 1575</span><br><span class="line">JFIFHH9......</span><br></pre></td></tr></table></figure>
 <h4 id="Content-length"><a href="#Content-length" class="headerlink" title="Content-length"></a>Content-length</h4><p>用来指明发送给接收方的消息主体的大小。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Content-Length: &lt;length&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Content-Length: &lt;length&gt;</span><br></pre></td></tr></table></figure>
 <h4 id="Content-Encoding"><a href="#Content-Encoding" class="headerlink" title="Content-Encoding"></a>Content-Encoding</h4><p>用于对特定媒体类型的数据进行压缩。<br>这个消息用来告知客户端应该怎样解码才能获取在 Content-Type 中的媒体类型内容。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Content-Encoding: gzip</div><div class="line"></div><div class="line">其值受 Accept-Encoding 影响</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Content-Encoding: gzip</span><br><span class="line"></span><br><span class="line">其值受 Accept-Encoding 影响</span><br></pre></td></tr></table></figure>
+
 <p>与此对应，Content-Language 也与 Accept-Language 对应。</p>
 <h2 id="六、参考链接"><a href="#六、参考链接" class="headerlink" title="六、参考链接"></a>六、参考链接</h2><ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP" target="_blank" rel="external">HTTP</a></li>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers" target="_blank" rel="external">HTTP Headers</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2016/08/http.html" target="_blank" rel="external">HTTP 协议入门</a><!--more-->
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP" target="_blank" rel="noopener">HTTP</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers" target="_blank" rel="noopener">HTTP Headers</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/08/http.html" target="_blank" rel="noopener">HTTP 协议入门</a><!--more-->
 </li>
 </ul>
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/Android/" rel="tag"># Android</a>
-          
-            <a href="/tags/HTTP/" rel="tag"># HTTP</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/02/25/使用 Google Cloud 搭建一年免费 Shadowsocks 教程/" rel="next" title="使用 Google Cloud 搭建一年免费 Shadowsocks 教程">
-                <i class="fa fa-chevron-left"></i> 使用 Google Cloud 搭建一年免费 Shadowsocks 教程
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-  <div class="comments" id="comments">
-    
-      <div id="hypercomments_widget"></div>
-    
-  </div>
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/uploads/avatar.png"
-               alt="xxtlant" />
-          <p class="site-author-name" itemprop="name">xxtlant</p>
-           
-              <p class="site-description motion-element" itemprop="description">只有努力,才会变得更强大. email:genius248@163.com</p>
-          
-        </div>
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives/">
-                <span class="site-state-item-count">5</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">4</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              
-                <span class="site-state-item-count">6</span>
-                <span class="site-state-item-name">标签</span>
-              
-            </div>
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://github.com/xxtlant" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://juejin.im/user/5734520a1532bc00653002fa" target="_blank" title="掘金">
-                  
-                    <i class="fa fa-fw fa-gg"></i>
-                  
-                  掘金
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://www.zhihu.com/people/xiao-xuan-zhu/activities" target="_blank" title="知乎">
-                  
-                    <i class="fa fa-fw fa-fa"></i>
-                  
-                  知乎
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://www.jianshu.com/u/0e034a36af1f" target="_blank" title="简书">
-                  
-                    <i class="fa fa-fw fa-internet-explorer"></i>
-                  
-                  简书
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://steamcommunity.com/id/xxtlant/" target="_blank" title="steam">
-                  
-                    <i class="fa fa-fw fa-steam-square"></i>
-                  
-                  steam
-                </a>
-              </span>
-            
-          
-        </div>
-
-        
-        
-
-        
-        
-
-        
-
-
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一、-HTTP-的工作方式"><span class="nav-number">2.</span> <span class="nav-text">一、 HTTP 的工作方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-请求过程"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 请求过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-请求方式"><span class="nav-number">2.2.</span> <span class="nav-text">1.2 请求方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#web-浏览器请求："><span class="nav-number">2.2.1.</span> <span class="nav-text">web 浏览器请求：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#APP-客户端请求："><span class="nav-number">2.2.2.</span> <span class="nav-text">APP 客户端请求：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-报文是什么"><span class="nav-number">2.3.</span> <span class="nav-text">1.3 报文是什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、HTTP-的报文格式"><span class="nav-number">3.</span> <span class="nav-text">二、HTTP 的报文格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-请求报文的格式"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 请求报文的格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-响应报文的格式"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 响应报文的格式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、-Method-请求方法"><span class="nav-number">4.</span> <span class="nav-text">三、 Method(请求方法)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GET"><span class="nav-number">4.1.</span> <span class="nav-text">GET</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Post"><span class="nav-number">4.2.</span> <span class="nav-text">Post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PUT"><span class="nav-number">4.3.</span> <span class="nav-text">PUT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DELETE"><span class="nav-number">4.4.</span> <span class="nav-text">DELETE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HEAD"><span class="nav-number">4.5.</span> <span class="nav-text">HEAD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小知识点"><span class="nav-number">4.6.</span> <span class="nav-text">小知识点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、状态码-status-code"><span class="nav-number">5.</span> <span class="nav-text">四、状态码(status code)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1xx：临时性消息。"><span class="nav-number">5.1.</span> <span class="nav-text">1xx：临时性消息。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2xx：成功。"><span class="nav-number">5.2.</span> <span class="nav-text">2xx：成功。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3xx：重定向。"><span class="nav-number">5.3.</span> <span class="nav-text">3xx：重定向。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4xx：客户端错误"><span class="nav-number">5.4.</span> <span class="nav-text">4xx：客户端错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5xx：服务器错误"><span class="nav-number">5.5.</span> <span class="nav-text">5xx：服务器错误</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、首部-Headers"><span class="nav-number">6.</span> <span class="nav-text">五、首部(Headers)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-通用首部"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 通用首部</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Date"><span class="nav-number">6.1.1.</span> <span class="nav-text">Date</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Connection"><span class="nav-number">6.1.2.</span> <span class="nav-text">Connection</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他通用首部"><span class="nav-number">6.1.3.</span> <span class="nav-text">其他通用首部</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-请求首部"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 请求首部</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Host"><span class="nav-number">6.2.1.</span> <span class="nav-text">Host</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept"><span class="nav-number">6.2.2.</span> <span class="nav-text">Accept</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept-Charset"><span class="nav-number">6.2.3.</span> <span class="nav-text">Accept-Charset</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept-Encoding"><span class="nav-number">6.2.4.</span> <span class="nav-text">Accept-Encoding</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept-Language"><span class="nav-number">6.2.5.</span> <span class="nav-text">Accept-Language</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Range"><span class="nav-number">6.2.6.</span> <span class="nav-text">Range</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#From"><span class="nav-number">6.2.7.</span> <span class="nav-text">From</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-响应首部"><span class="nav-number">6.3.</span> <span class="nav-text">5.3 响应首部</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Server"><span class="nav-number">6.3.1.</span> <span class="nav-text">Server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Set-Cookie"><span class="nav-number">6.3.2.</span> <span class="nav-text">Set-Cookie</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Accept-Ranges"><span class="nav-number">6.3.3.</span> <span class="nav-text">Accept-Ranges</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-Body-首部"><span class="nav-number">6.4.</span> <span class="nav-text">5.4 Body 首部</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Location"><span class="nav-number">6.4.1.</span> <span class="nav-text">Location</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Type"><span class="nav-number">6.4.2.</span> <span class="nav-text">Content-Type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-length"><span class="nav-number">6.4.3.</span> <span class="nav-text">Content-length</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Encoding"><span class="nav-number">6.4.4.</span> <span class="nav-text">Content-Encoding</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、参考链接"><span class="nav-number">7.</span> <span class="nav-text">六、参考链接</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">xxtlant</span>
-</div>
-
-
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
-  </a>
-</div>
-
-
-        
-<div class="busuanzi-count">
-  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-  
-    <span class="site-uv">
-      <i class="fa fa-user">本站访客数</i>
-      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
-      人次
-    </span>
-  
-
-  
-    <span class="site-pv">
-      <i class="fa fa-eye">本站总访问量</i>
-      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
-      次
-    </span>
-  
-</div>
-
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-  </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-  
-  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-		<script type="text/javascript">
-		_hcwp = window._hcwp || [];
-
-		_hcwp.push({widget:"Bloggerstream", widget_id: 93611, selector:".hc-comment-count", label: "{\%COUNT%\}" });
-
-		
-		_hcwp.push({widget:"Stream", widget_id: 93611, xid: "2019/02/12/HTTP 协议完全解析/"});
-		
-
-		(function() {
-		if("HC_LOAD_INIT" in window)return;
-		HC_LOAD_INIT = true;
-		var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
-		var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
-		hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://w.hypercomments.com/widget/hc/93611/"+lang+"/widget.js";
-		var s = document.getElementsByTagName("script")[0];
-		s.parentNode.insertBefore(hcc, s.nextSibling);
-		})();
-		</script>
-
-	
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
-  <script>AV.initialize("04AsXkmLvwa2TQaSSKFChn5v-gzGzoHsz", "yetmRuBHnbMFHrOroVe87XPV");</script>
-  <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
-
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
-        });
-    }
-
-    function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
-    });
-  </script>
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-</body>
-</html>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">王菜花</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://caihuasay.com/2019/02/12/HTTP%20%E5%8D%8F%E8%AE%AE%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90/">http://caihuasay.com/2019/02/12/HTTP%20%E5%8D%8F%E8%AE%AE%E5%AE%8C%E5%85%A8%E8%A7%A3%E6%9E%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://caihuasay.com" target="_blank">王菜花</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/HTTP/">HTTP</a><a class="post-meta__tags" href="/tags/Android/">Android</a></div><div class="post_share"><div class="social-share" data-image="https://ww1.sinaimg.cn/large/007i4MEmgy1g03x0fvse0j3334223kjn.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><div class="post-reward"><a class="reward-button button--primary button--animated"> <i class="fa fa-qrcode"></i> 打赏<div class="reward-main"><ul class="reward-all"><li class="reward-item"><img class="post-qr-code__img" src="/img/wechat.jpg" alt="微信"/><div class="post-qr-code__desc">微信</div></li><li class="reward-item"><img class="post-qr-code__img" src="/img/alipay.jpg" alt="支付寶"/><div class="post-qr-code__desc">支付寶</div></li></ul></div></a></div><nav class="pagination_post" id="pagination"><div class="next-post pull-full"><a href="/2018/02/25/%E4%BD%BF%E7%94%A8%20Google%20Cloud%20%E6%90%AD%E5%BB%BA%E4%B8%80%E5%B9%B4%E5%85%8D%E8%B4%B9%20Shadowsocks%20%E6%95%99%E7%A8%8B/"><img class="next_cover" src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1184128736,2921380157&amp;fm=26&amp;gp=0.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">使用 Google Cloud 搭建一年免费 Shadowsocks 教程</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fa fa-fw fa-thumbs-up" aria-hidden="true"></i><span> 相关推荐</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2017/09/19/Android 开发实用小技巧/" title="Android 开发实用小技巧"><img class="relatedPosts_cover" src="https://pic.downk.cc/item/5eaeda37c2a9a83be5dd2581.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2017-09-19</div><div class="relatedPosts_title">Android 开发实用小技巧</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/19/Android Studio 常用插件整理/" title="Android Studio 常用插件整理"><img class="relatedPosts_cover" src="https://pic.downk.cc/item/5eaeda37c2a9a83be5dd2581.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2017-08-19</div><div class="relatedPosts_title">Android Studio 常用插件整理</div></div></a></div></div><div class="clear_both"></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 By 王菜花</div><div class="framework-info"><span>驱动 </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div><div class="footer_custom_text">Hi, welcome to my <a href="https://caihuasay.com/">blog</a>!</div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><a class="translate_chn_to_cht" id="translateLink" href="javascript:translatePage();" title="简繁转换" target="_self">繁</a><i class="darkmode fa fa-moon-o" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script></body></html>
