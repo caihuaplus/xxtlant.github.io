@@ -1,11 +1,12 @@
 ---
 title: HashMap原理解析
+id: 6
 date: 2020-05-07 10:56:08
 urlname: HashMap_Analysis
 tags:
-	- Java
+	- Android
 	- HashMap
-categories: Java
+categories: Android
 cover: https://upload-images.jianshu.io/upload_images/3303429-ed146cf6826ca5d9.jpeg
 ---
 

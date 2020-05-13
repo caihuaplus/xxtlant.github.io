@@ -1,5 +1,6 @@
 ---
 title: {{ title }}
+id: 
 date: {{ date }}
 urlname: 
 tags:
